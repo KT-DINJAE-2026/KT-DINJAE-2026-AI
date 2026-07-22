@@ -24,16 +24,67 @@ KT 디인재 프로젝트 AI 레포지토리
 - **모델A**: LightGBM 분류 — 승차 시점에 입석하는지(Y/N) 예측
 - **모델B**: LightGBM 회귀 — 모델A가 Y로 판단한 경우, 착석까지 걸리는 시간(초) 예측
 - 학습 피처: 노선, 승하차 정류장, 요일/시각, 공휴일, 날씨, 배차간격, 버스 유형(좌석수), 사용자구분코드
-- 정답 레이블(`is_standing`, `standing_seconds`)은 백엔드가 TCD 원본에서 재차인원 복원 + FIFO 좌석배정 시뮬레이션을 거쳐 산출한 값을 사용
+- 정답 레이블(`is_standing`, `standing_seconds`)은 TCD 원본에서 재차인원 복원 + FIFO 좌석배정 시뮬레이션을 거쳐 산출한 값을 사용
 
 자세한 데이터 스펙과 결정/미결정 사항은 `docs/` 참고.
+
+## 모델 파이프라인 상세
+
+### 흐름 요약
+
+1. **`train_models.py`** — parquet을 그대로 넣고 실행
+   - 모델A: `LGBMClassifier`로 `is_standing`(Y/N) 분류
+   - 모델B: 모델A 정답이 `Y`인 행만 필터링해서 `standing_seconds` 회귀
+   - 저장 포맷은 `.txt`(LightGBM 네이티브) — `.pkl`/`joblib`은 파이썬 전용이라 백엔드가 Spring(Java)이면 못 읽음. `.txt`는 LightGBM 공식 포맷이라 Java 쪽 LightGBM 바인딩으로도 로드 가능
+   - ⚠️ 백엔드가 Java에서 이 `.txt`를 직접 로드할지, 아니면 AI가 별도 Python 추론 서버를 띄우고 백엔드가 API로 호출할지는 **아직 미정 — 다음 회의 안건**
+2. **`inference.py`** — 학습된 모델A/B를 합쳐서 API 응답 JSON을 생성
+
+### 입력
+
+`predict_journey()` 함수에 아래 피처 딕셔너리와 표본 수를 전달:
+
+| 피처 | 설명 |
+| --- | --- |
+| `route_id`, `board_stop_id`, `alight_stop_id` | 노선 및 승하차 정류장 (국토부 표준 ID) |
+| `weekday`, `hour`, `is_holiday` | 요일/시각/공휴일 여부 |
+| `weather` | 승차 시점 날씨 |
+| `headway_sec` | 배차간격(초) |
+| `bus_type_code`, `seat_capacity` | 버스 유형 및 좌석수 |
+| `usertype_code` | 사용자구분코드 |
+| `sample_count` | 해당 (노선,구간,시간대) 조합의 학습 표본 수 — `INSUFFICIENT_DATA` 판정용 |
+
+### 상수 (팀 확정 필요)
+
+| 상수 | 현재 기본값 | 의미 |
+| --- | --- | --- |
+| `STANDING_PROBA_THRESHOLD` | 0.5 | 모델A 확률이 이 이상이면 "입석"으로 확정 |
+| `RISK_MEDIUM_SEC` | 300초 | 입석시간이 이하면 "보통", 초과면 "높음" (기획서 "5분 이하/초과" 기준 그대로 적용. 팀에서 논의된 "전체 탑승시간 n%" 기준은 아직 미정이라 시간 기준으로 임시 적용) |
+| `MIN_SAMPLE_COUNT` | 30 | 표본이 이보다 적으면 `INSUFFICIENT_DATA` |
+
+### 출력
+
+```json
+{
+  "dataStatus": "SUCCESS",       // or "INSUFFICIENT_DATA"
+  "isStanding": "Y",
+  "standingSeconds": 423,
+  "riskLevel": "MEDIUM",         // LOW/MEDIUM/HIGH = 기획서의 낮음/보통/높음
+  "confidence": 0.812
+}
+```
+
+### 최종적으로 백엔드에 넘길 것
+
+1. `model_a.txt`, `model_b.txt` — 학습된 모델 파일
+2. `predict_journey()` 함수 스펙 — 위 입력/출력 구조
+3. 임계값 확정본 — 위 3개 상수를 팀 회의로 정한 뒤 문서화
 
 ## 실행
 
 ```bash
 pip install -r requirements.txt
 
-# 학습 (백엔드가 준 실제 parquet 파일 경로로 DATA_PATH 수정 후 실행)
+# 학습 (parquet 파일 경로로 DATA_PATH 수정 후 실행)
 python src/train_models.py
 
 # 추론 예시
@@ -44,4 +95,4 @@ python src/inference.py
 
 - `RISK_MEDIUM_SEC`, `STANDING_PROBA_THRESHOLD`, `MIN_SAMPLE_COUNT` 등 임계값 팀 확정 필요
 - 모델 서빙 방식(백엔드가 `.txt` 모델을 직접 로드 vs AI가 별도 추론 서버 운영) 결정 필요
-- 교통약자 판별 범위(국가유공자/일반인 포함 여부), 임산부 식별 방안 — `docs/TCD_meeting_notes_20260722.md` 액션 아이템 참고
+- 교통약자 판별 범위(국가유공자/일반인 포함 여부), 임산부 식별 방안 — `docs/20260724.md` 액션 아이템 참고
