@@ -1,0 +1,17 @@
+# 실제 학습 데이터 (용량 크고, TCD 원본 유래 데이터라 커밋 지양)
+*.parquet
+!schema/TCD_학습용명부_예시스펙.parquet
+
+# 학습된 모델 아티팩트 (재생성되는 산출물)
+models/
+*.txt
+!requirements.txt
+
+# 파이썬 캐시
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 가상환경
+.venv/
+venv/
