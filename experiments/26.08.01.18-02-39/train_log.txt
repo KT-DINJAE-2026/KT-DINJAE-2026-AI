@@ -1,0 +1,164 @@
+로딩 시간: 9.3초
+(9549276, 18)
+trip_round_id                           0
+route_id                                0
+board_stop_id                           0
+alight_stop_id                     170612
+board_datetime                          0
+weekday                                 0
+hour                                    0
+is_holiday                              0
+weather                                 0
+headway_sec                        152139
+bus_type_code                           0
+bus_type_name                           0
+seat_capacity                           0
+usertype_code                           0
+usertype_name                           0
+is_standing                             0
+standing_seconds                       28
+sample_count_route_segment_hour         0
+dtype: int64
+결측 제외 후: (9378664, 18)
+y_standing
+0    8458443
+1     920221
+Name: count, dtype: int64
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Info] Number of positive: 736177, number of negative: 6766754
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.528059 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 2569
+[LightGBM] [Info] Number of data points in the train set: 7502931, number of used features: 10
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.098119 -> initscore=-2.218306
+[LightGBM] [Info] Start training from score -2.218306
+Training until validation scores don't improve for 30 rounds
+[50]	valid_0's binary_logloss: 0.208295
+[100]	valid_0's binary_logloss: 0.190149
+[150]	valid_0's binary_logloss: 0.182405
+[200]	valid_0's binary_logloss: 0.178099
+[250]	valid_0's binary_logloss: 0.175256
+[300]	valid_0's binary_logloss: 0.173255
+[350]	valid_0's binary_logloss: 0.171669
+[400]	valid_0's binary_logloss: 0.170406
+[450]	valid_0's binary_logloss: 0.169465
+[500]	valid_0's binary_logloss: 0.168556
+[550]	valid_0's binary_logloss: 0.167829
+[600]	valid_0's binary_logloss: 0.167187
+[650]	valid_0's binary_logloss: 0.166593
+[700]	valid_0's binary_logloss: 0.166067
+[750]	valid_0's binary_logloss: 0.165598
+[800]	valid_0's binary_logloss: 0.165162
+[850]	valid_0's binary_logloss: 0.164804
+[900]	valid_0's binary_logloss: 0.164444
+[950]	valid_0's binary_logloss: 0.164132
+[1000]	valid_0's binary_logloss: 0.163861
+[1050]	valid_0's binary_logloss: 0.163538
+[1100]	valid_0's binary_logloss: 0.163268
+[1150]	valid_0's binary_logloss: 0.163026
+[1200]	valid_0's binary_logloss: 0.162806
+[1250]	valid_0's binary_logloss: 0.162608
+[1300]	valid_0's binary_logloss: 0.162405
+[1350]	valid_0's binary_logloss: 0.162218
+[1400]	valid_0's binary_logloss: 0.161954
+[1450]	valid_0's binary_logloss: 0.161762
+[1500]	valid_0's binary_logloss: 0.161555
+[1550]	valid_0's binary_logloss: 0.161333
+[1600]	valid_0's binary_logloss: 0.161083
+[1650]	valid_0's binary_logloss: 0.160909
+[1700]	valid_0's binary_logloss: 0.160778
+[1750]	valid_0's binary_logloss: 0.160638
+[1800]	valid_0's binary_logloss: 0.160535
+[1850]	valid_0's binary_logloss: 0.160421
+[1900]	valid_0's binary_logloss: 0.160305
+[1950]	valid_0's binary_logloss: 0.160144
+[2000]	valid_0's binary_logloss: 0.160052
+Did not meet early stopping. Best iteration is:
+[2000]	valid_0's binary_logloss: 0.160052
+[모델A] AUC: 0.9475748487974692
+[모델A] Accuracy: 0.9317200262510709
+
+[모델A 피처 중요도]
+board_stop_id     21232
+alight_stop_id    19564
+headway_sec        6630
+hour               4716
+route_id           4605
+weekday            2295
+weather             562
+bus_type_code       235
+usertype_code       136
+seat_capacity        25
+is_holiday            0
+dtype: int32
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.049505 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 1685
+[LightGBM] [Info] Number of data points in the train set: 736176, number of used features: 10
+[LightGBM] [Info] Start training from score 344.160046
+Training until validation scores don't improve for 30 rounds
+[50]	valid_0's l2: 44740.1
+[100]	valid_0's l2: 39732.5
+[150]	valid_0's l2: 37484.3
+[200]	valid_0's l2: 36234.4
+[250]	valid_0's l2: 35435.7
+[300]	valid_0's l2: 34780.5
+[350]	valid_0's l2: 34322.3
+[400]	valid_0's l2: 33942.2
+[450]	valid_0's l2: 33669.8
+[500]	valid_0's l2: 33400.9
+[550]	valid_0's l2: 33173.5
+[600]	valid_0's l2: 32944.2
+[650]	valid_0's l2: 32778.9
+[700]	valid_0's l2: 32628.8
+[750]	valid_0's l2: 32471.8
+[800]	valid_0's l2: 32348.1
+[850]	valid_0's l2: 32218.9
+[900]	valid_0's l2: 32125.4
+[950]	valid_0's l2: 32035.4
+[1000]	valid_0's l2: 31938.4
+[1050]	valid_0's l2: 31843.5
+[1100]	valid_0's l2: 31772
+[1150]	valid_0's l2: 31706.3
+[1200]	valid_0's l2: 31638.6
+[1250]	valid_0's l2: 31538.5
+[1300]	valid_0's l2: 31465.9
+[1350]	valid_0's l2: 31392.3
+[1400]	valid_0's l2: 31334.5
+[1450]	valid_0's l2: 31284.2
+[1500]	valid_0's l2: 31229.2
+[1550]	valid_0's l2: 31185.2
+[1600]	valid_0's l2: 31137.7
+[1650]	valid_0's l2: 31086.1
+[1700]	valid_0's l2: 31024
+[1750]	valid_0's l2: 30978.2
+[1800]	valid_0's l2: 30939.9
+[1850]	valid_0's l2: 30889.5
+[1900]	valid_0's l2: 30851.1
+[1950]	valid_0's l2: 30819.1
+[2000]	valid_0's l2: 30783
+Did not meet early stopping. Best iteration is:
+[2000]	valid_0's l2: 30783
+[모델B] MAE: 119.1초  RMSE: 175.5초  (평균 입석시간: 343.8초)
+
+[모델B 피처 중요도]
+alight_stop_id    14929
+headway_sec       14546
+board_stop_id     14134
+hour               6676
+route_id           4340
+weekday            3160
+weather            1150
+bus_type_code       896
+usertype_code       169
+is_holiday            0
+seat_capacity         0
+dtype: int32
+
+저장 완료: d:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.01.18-02-39\model_a.txt, d:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.01.18-02-39\model_b.txt
+metrics.json 저장 완료: d:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.01.18-02-39\metrics.json
