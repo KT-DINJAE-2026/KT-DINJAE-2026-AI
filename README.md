@@ -9,13 +9,22 @@ KT 디인재 프로젝트 AI 레포지토리
 ```text
 .
 ├── docs/
-│   ├── 20260724.md      # 회의록 (교통약자 판별 / 버스 유형 필터링 기준 / 백엔드 요청사항)
+│   ├── 20260724.md                        # 회의록 (교통약자 판별 / 버스 유형 필터링 기준 / 백엔드 요청사항)
 │   └── TCD_학습용명부_컬럼설명.md          # 학습용 명부 스키마 컬럼 정의
 ├── schema/
 │   └── TCD_학습용명부_예시스펙.parquet     # 예시 스키마(실제 데이터 아님)
 ├── src/
-│   ├── train_models.py                    # 모델A(입석여부 분류)/모델B(입석시간 회귀) 학습
+│   ├── train_models.py                    # 정식 학습 코드 (300트리)
+│   ├── train_models_wandb.py              # 실험용 학습 코드 (1000트리, wandb 연동, 결과 자동 정리+push)
 │   └── inference.py                       # 학습된 모델로 API 응답 형태 예측 결과 생성
+├── experiments/
+│   └── {실행시각}/                        # 실험별 결과 폴더 (train_models_wandb.py 실행 시 자동 생성)
+│       ├── train_log.txt
+│       ├── model_a.txt
+│       ├── model_b.txt
+│       └── metrics.json
+├── .gitignore
+├── README.md
 └── requirements.txt
 ```
 
@@ -28,11 +37,26 @@ KT 디인재 프로젝트 AI 레포지토리
 
 자세한 데이터 스펙과 결정/미결정 사항은 `docs/` 참고.
 
+## 최근 실험 결과 (`experiments/26.08.01.17-18-00`)
+
+서초구 4월 한 달치(938만 행), 1000트리 기준:
+
+| 모델 | 지표 | 결과 |
+| --- | --- | --- |
+| 모델A (입석여부 분류) | AUC | 0.9447 |
+| 모델A | Accuracy | 0.9307 |
+| 모델B (입석시간 회귀) | MAE | 121.4초 |
+| 모델B | RMSE | 178.7초 |
+
+- 피처 중요도: 승하차 정류장 > 노선·시각 > 배차간격·요일 순. 공휴일·좌석수는 기여도 거의 없음(4월 데이터에 공휴일 부재로 추정)
+- wandb 대시보드: `https://wandb.ai/newhaneul-inha-university/bus-standing-prediction`
+- 실험 결과 히스토리는 `experiments/` 폴더에 타임스탬프별로 누적
+
 ## 모델 파이프라인 상세
 
 ### 흐름 요약
 
-1. **`train_models.py`** — parquet을 그대로 넣고 실행
+1. **`train_models.py`** (정식본) 또는 **`train_models_wandb.py`** (실험용) — parquet을 그대로 넣고 실행
    - 모델A: `LGBMClassifier`로 `is_standing`(Y/N) 분류
    - 모델B: 모델A 정답이 `Y`인 행만 필터링해서 `standing_seconds` 회귀
    - 저장 포맷은 `.txt`(LightGBM 네이티브) — `.pkl`/`joblib`은 파이썬 전용이라 백엔드가 Spring(Java)이면 못 읽음. `.txt`는 LightGBM 공식 포맷이라 Java 쪽 LightGBM 바인딩으로도 로드 가능
@@ -84,8 +108,11 @@ KT 디인재 프로젝트 AI 레포지토리
 ```bash
 pip install -r requirements.txt
 
-# 학습 (parquet 파일 경로로 DATA_PATH 수정 후 실행)
+# 정식 학습 (300트리)
 python src/train_models.py
+
+# 실험용 학습 (1000트리 + wandb 연동, 결과 자동으로 experiments/ 저장 및 push)
+python src/train_models_wandb.py
 
 # 추론 예시
 python src/inference.py
@@ -96,3 +123,4 @@ python src/inference.py
 - `RISK_MEDIUM_SEC`, `STANDING_PROBA_THRESHOLD`, `MIN_SAMPLE_COUNT` 등 임계값 팀 확정 필요
 - 모델 서빙 방식(백엔드가 `.txt` 모델을 직접 로드 vs AI가 별도 추론 서버 운영) 결정 필요
 - 교통약자 판별 범위(국가유공자/일반인 포함 여부), 임산부 식별 방안 — `docs/20260724.md` 액션 아이템 참고
+- 정류장/노선 ID가 국토부 표준 ID 체계인지 백엔드와 최종 확인 필요
