@@ -15,7 +15,7 @@ KT 디인재 프로젝트 AI 레포지토리
 │   └── TCD_학습용명부_예시스펙.parquet     # 예시 스키마(실제 데이터 아님)
 ├── src/
 │   ├── train_models.py                    # 정식 학습 코드 (300트리)
-│   ├── train_models_wandb.py              # 실험용 학습 코드 (1000트리, wandb 연동, 결과 자동 정리+push)
+│   ├── train_models_wandb.py              # 실험용 학습 코드 (wandb 연동, 결과 자동 정리+push)
 │   └── inference.py                       # 학습된 모델로 API 응답 형태 예측 결과 생성
 ├── experiments/
 │   └── {실행시각}/                        # 실험별 결과 폴더 (train_models_wandb.py 실행 시 자동 생성)
@@ -37,26 +37,28 @@ KT 디인재 프로젝트 AI 레포지토리
 
 자세한 데이터 스펙과 결정/미결정 사항은 `docs/` 참고.
 
-## 최근 실험 결과 (`experiments/26.08.01.17-18-00`)
+## 실험 결과 추이 (300 → 1000 → 2000트리)
 
-서초구 4월 한 달치(938만 행), 1000트리 기준:
+서초구 4월 한 달치(938만 행) 동일 데이터 기준, 트리 수를 늘려가며 확인:
 
-| 모델 | 지표 | 결과 |
-| --- | --- | --- |
-| 모델A (입석여부 분류) | AUC | 0.9447 |
-| 모델A | Accuracy | 0.9307 |
-| 모델B (입석시간 회귀) | MAE | 121.4초 |
-| 모델B | RMSE | 178.7초 |
+| | 300트리 | 1000트리 | 2000트리 |
+| --- | --- | --- | --- |
+| 모델A AUC | 0.9374 | 0.9447 | **0.9476** |
+| 모델A Accuracy | 92.84% | 93.07% | **93.17%** |
+| 모델B MAE | 127.2초 | 121.4초 | **119.1초** |
+| 모델B RMSE | 186.5초 | 178.7초 | **175.5초** |
+
+트리 수를 늘릴수록 전 지표가 꾸준히 개선되고 있습니다(300→1000 구간보다 1000→2000 구간의 개선 폭은 줄어드는 추세 — 수확체감 구간에 근접). 다음 실험은 트리 수 대신 `learning_rate`, `num_leaves` 등 다른 하이퍼파라미터 조정 위주로 진행할 계획입니다.
 
 - 피처 중요도: 승하차 정류장 > 노선·시각 > 배차간격·요일 순. 공휴일·좌석수는 기여도 거의 없음(4월 데이터에 공휴일 부재로 추정)
 - wandb 대시보드: `https://wandb.ai/newhaneul-inha-university/bus-standing-prediction`
-- 실험 결과 히스토리는 `experiments/` 폴더에 타임스탬프별로 누적
+- 실험 결과 히스토리는 `experiments/` 폴더에 타임스탬프별로 누적 (최신: `experiments/26.08.01.18-02-39`)
 
 ## 모델 파이프라인 상세
 
 ### 흐름 요약
 
-1. **`train_models.py`** (정식본) 또는 **`train_models_wandb.py`** (실험용) — parquet을 그대로 넣고 실행
+1. **`train_models.py`** (정식본) 또는 **`train_models_wandb.py`** (실험용, 하이퍼파라미터는 스크립트 상단 `N_ESTIMATORS`/`LEARNING_RATE` 변수로 조정) — parquet을 그대로 넣고 실행
    - 모델A: `LGBMClassifier`로 `is_standing`(Y/N) 분류
    - 모델B: 모델A 정답이 `Y`인 행만 필터링해서 `standing_seconds` 회귀
    - 저장 포맷은 `.txt`(LightGBM 네이티브) — `.pkl`/`joblib`은 파이썬 전용이라 백엔드가 Spring(Java)이면 못 읽음. `.txt`는 LightGBM 공식 포맷이라 Java 쪽 LightGBM 바인딩으로도 로드 가능
@@ -111,7 +113,7 @@ pip install -r requirements.txt
 # 정식 학습 (300트리)
 python src/train_models.py
 
-# 실험용 학습 (1000트리 + wandb 연동, 결과 자동으로 experiments/ 저장 및 push)
+# 실험용 학습 (하이퍼파라미터는 스크립트 상단에서 조정, 결과 자동으로 experiments/ 저장 및 push)
 python src/train_models_wandb.py
 
 # 추론 예시
