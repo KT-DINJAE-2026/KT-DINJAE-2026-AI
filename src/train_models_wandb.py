@@ -20,6 +20,10 @@ EXPERIMENTS_DIR = os.path.join(REPO_DIR, "experiments")
 
 AUTO_PUSH = True
 
+# ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
+N_ESTIMATORS = 2000
+LEARNING_RATE = 0.05
+
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
 os.makedirs(RUN_DIR, exist_ok=True)
@@ -82,17 +86,17 @@ X_train, X_test, y_train, y_test = train_test_split(
 # ── STEP 5: 모델A 학습 (입석여부 분류) ───────────────
 wandb.init(
     project="bus-standing-prediction",
-    name=f"model_a_1000trees_{RUN_TS}",
+    name=f"model_a_{N_ESTIMATORS}trees_{RUN_TS}",
     config={
         "model": "A_classifier",
-        "n_estimators": 1000,
-        "learning_rate": 0.05,
+        "n_estimators": N_ESTIMATORS,
+        "learning_rate": LEARNING_RATE,
         "train_rows": len(X_train),
         "features": feature_cols,
     }
 )
 
-model_a = lgb.LGBMClassifier(n_estimators=1000, learning_rate=0.05)
+model_a = lgb.LGBMClassifier(n_estimators=N_ESTIMATORS, learning_rate=LEARNING_RATE)
 model_a.fit(
     X_train, y_train,
     categorical_feature=categorical_cols,
@@ -144,17 +148,17 @@ Xb_train, Xb_test, yb_train, yb_test = train_test_split(
 
 wandb.init(
     project="bus-standing-prediction",
-    name=f"model_b_1000trees_{RUN_TS}",
+    name=f"model_b_{N_ESTIMATORS}trees_{RUN_TS}",
     config={
         "model": "B_regressor",
-        "n_estimators": 1000,
-        "learning_rate": 0.05,
+        "n_estimators": N_ESTIMATORS,
+        "learning_rate": LEARNING_RATE,
         "train_rows": len(Xb_train),
         "features": feature_cols,
     }
 )
 
-model_b = lgb.LGBMRegressor(n_estimators=1000, learning_rate=0.05)
+model_b = lgb.LGBMRegressor(n_estimators=N_ESTIMATORS, learning_rate=LEARNING_RATE)
 model_b.fit(
     Xb_train, yb_train,
     categorical_feature=categorical_cols,
@@ -198,8 +202,8 @@ print(f"\n저장 완료: {model_a_path}, {model_b_path}")
 # ── STEP 7: metrics.json 저장 ─────────────────────────
 metrics = {
     "run_ts": RUN_TS,
-    "n_estimators": 1000,
-    "learning_rate": 0.05,
+    "n_estimators": N_ESTIMATORS,
+    "learning_rate": LEARNING_RATE,
     "train_rows_a": len(X_train),
     "train_rows_b": len(Xb_train),
     "model_a": {"auc": auc_a, "accuracy": acc_a},
@@ -231,7 +235,7 @@ rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
 if AUTO_PUSH:
     ok = run_git(["add", rel_path])
     if ok:
-        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
     if ok:
         ok = run_git(["push"])
     if ok:
