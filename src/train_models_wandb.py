@@ -34,7 +34,6 @@ def save_model_safely(booster, final_path):
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
 # ── 로그 저장 설정: print() 출력을 콘솔 + 실험 폴더 안 train_log.txt에 동시 기록 ──
-# ── 로그 저장 설정: print() 출력을 콘솔 + 실험 폴더 안 train_log.txt에 동시 기록 ──
 class Tee:
     def __init__(self, *files):
         self.files = files
@@ -46,8 +45,6 @@ class Tee:
         for f in self.files:
             f.flush()
 
-log_path = os.path.join(RUN_DIR, "train_log.txt")
-log_file = open(log_path, "w", encoding="utf-8")
 log_path = os.path.join(RUN_DIR, "train_log.txt")
 log_file = open(log_path, "w", encoding="utf-8")
 sys.stdout = Tee(sys.stdout, log_file)

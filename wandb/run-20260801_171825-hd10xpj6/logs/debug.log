@@ -1,0 +1,27 @@
+2026-08-01 17:18:25,874 INFO    MainThread:32548 [wandb_setup.py:_flush():81] Current SDK version is 0.28.1
+2026-08-01 17:18:25,874 INFO    MainThread:32548 [wandb_setup.py:_flush():81] Configure stats pid to 32548
+2026-08-01 17:18:25,874 INFO    MainThread:32548 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-08-01 17:18:25,875 INFO    MainThread:32548 [wandb_init.py:setup_run_log_directory():729] Logging user logs to D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\wandb\run-20260801_171825-hd10xpj6\logs\debug.log
+2026-08-01 17:18:25,875 INFO    MainThread:32548 [wandb_init.py:setup_run_log_directory():730] Logging internal logs to D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\wandb\run-20260801_171825-hd10xpj6\logs\debug-internal.log
+2026-08-01 17:18:25,893 INFO    MainThread:32548 [wandb_init.py:init():772] calling init triggers
+2026-08-01 17:18:25,893 INFO    MainThread:32548 [wandb_init.py:init():777] wandb.init called with sweep_config: {}
+config: {'model': 'A_classifier', 'n_estimators': 1000, 'learning_rate': 0.05, 'train_rows': 7502931, 'features': ['route_id', 'board_stop_id', 'alight_stop_id', 'weekday', 'weather', 'bus_type_code', 'usertype_code', 'hour', 'is_holiday', 'headway_sec', 'seat_capacity'], '_wandb': {}}
+2026-08-01 17:18:25,893 INFO    MainThread:32548 [wandb_init.py:init():820] starting backend
+2026-08-01 17:18:25,893 INFO    MainThread:32548 [wandb_init.py:init():835] sending inform_init request
+2026-08-01 17:18:26,041 INFO    MainThread:32548 [wandb_init.py:init():840] backend started and connected
+2026-08-01 17:18:26,075 INFO    MainThread:32548 [wandb_init.py:init():910] updated telemetry
+2026-08-01 17:18:26,301 INFO    MainThread:32548 [wandb_init.py:init():933] communicating run to backend with 90.0 second timeout
+2026-08-01 17:18:26,896 INFO    MainThread:32548 [wandb_init.py:init():978] starting run threads in backend
+2026-08-01 17:18:27,065 INFO    MainThread:32548 [wandb_run.py:_console_start():2621] atexit reg
+2026-08-01 17:18:27,066 INFO    MainThread:32548 [wandb_run.py:_redirect():2471] redirect: wrap_raw
+2026-08-01 17:18:27,066 INFO    MainThread:32548 [wandb_run.py:_redirect():2540] Wrapping output streams.
+2026-08-01 17:18:27,066 INFO    MainThread:32548 [wandb_run.py:_redirect():2563] Redirects installed.
+2026-08-01 17:18:27,072 INFO    MainThread:32548 [wandb_init.py:init():1016] run started, returning control to user process
+2026-08-01 17:18:36,055 INFO    MainThread:32548 [wandb_run.py:_config_callback():1346] config_cb None None {'boosting_type': 'gbdt', 'colsample_bytree': 1.0, 'learning_rate': 0.05, 'max_depth': -1, 'min_child_samples': 20, 'min_child_weight': 0.001, 'min_split_gain': 0.0, 'num_leaves': 31, 'random_state': None, 'reg_alpha': 0.0, 'reg_lambda': 0.0, 'subsample': 1.0, 'subsample_for_bin': 200000, 'subsample_freq': 0, 'objective': 'binary', 'metric': ['binary'], 'num_threads': 4, 'num_iterations': 1000}
+2026-08-01 17:25:03,080 INFO    MainThread:32548 [wandb_run.py:_config_callback():1346] config_cb ('_wandb', 'visualize', 'Feature Importance') {'panel_type': 'Vega2', 'panel_config': {'panelDefId': 'wandb/bar/v0', 'fieldSettings': {'label': 'Feature', 'value': 'Importance'}, 'stringSettings': {'title': 'Feature Importance'}, 'transform': {'name': 'tableWithLeafColNames'}, 'userQuery': {'queryFields': [{'name': 'runSets', 'args': [{'name': 'runSets', 'value': '${runSets}'}], 'fields': [{'name': 'id', 'fields': []}, {'name': 'name', 'fields': []}, {'name': '_defaultColorIndex', 'fields': []}, {'name': 'summaryTable', 'args': [{'name': 'tableKey', 'value': 'Feature Importance_table'}], 'fields': []}]}]}}} None
+2026-08-01 17:28:28,302 INFO    MainThread:32548 [wandb_run.py:_config_callback():1346] config_cb ('_wandb', 'visualize', 'model_a/feature_importance') {'panel_type': 'Vega2', 'panel_config': {'panelDefId': 'wandb/bar/v0', 'fieldSettings': {'label': 'feature', 'value': 'importance'}, 'stringSettings': {'title': 'Model A Feature Importance'}, 'transform': {'name': 'tableWithLeafColNames'}, 'userQuery': {'queryFields': [{'name': 'runSets', 'args': [{'name': 'runSets', 'value': '${runSets}'}], 'fields': [{'name': 'id', 'fields': []}, {'name': 'name', 'fields': []}, {'name': '_defaultColorIndex', 'fields': []}, {'name': 'summaryTable', 'args': [{'name': 'tableKey', 'value': 'model_a/feature_importance_table'}], 'fields': []}]}]}}} None
+2026-08-01 17:28:28,966 INFO    MainThread:32548 [wandb_run.py:_finish():2383] finishing run newhaneul-inha-university/bus-standing-prediction/hd10xpj6
+2026-08-01 17:28:28,966 INFO    MainThread:32548 [wandb_run.py:_atexit_cleanup():2588] got exitcode: 0
+2026-08-01 17:28:28,967 INFO    MainThread:32548 [wandb_run.py:_restore():2570] restore
+2026-08-01 17:28:28,967 INFO    MainThread:32548 [wandb_run.py:_restore():2576] restore done
+2026-08-01 17:28:34,551 INFO    MainThread:32548 [wandb_run.py:_footer_sync_info():3993] logging synced files

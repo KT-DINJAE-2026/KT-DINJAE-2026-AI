@@ -1,0 +1,48 @@
+C:\Users\kkh\AppData\Local\Programs\Python\Python310\lib\site-packages\lightgbm\sklearn.py:1106: LGBMDeprecationWarning: The argument 'eval_set' is deprecated, use 'eval_X' and 'eval_y' instead.
+  eval_set = _validate_eval_set_Xy(eval_set=eval_set, eval_X=eval_X, eval_y=eval_y)
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.039506 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 1685
+[LightGBM] [Info] Number of data points in the train set: 736176, number of used features: 10
+[LightGBM] [Info] Start training from score 344.160046
+Training until validation scores don't improve for 30 rounds
+[50]	valid_0's l2: 44740.1
+[100]	valid_0's l2: 39732.5
+[150]	valid_0's l2: 37484.3
+[200]	valid_0's l2: 36234.4
+[250]	valid_0's l2: 35435.7
+[300]	valid_0's l2: 34780.5
+[350]	valid_0's l2: 34322.3
+[400]	valid_0's l2: 33942.2
+[450]	valid_0's l2: 33669.8
+[500]	valid_0's l2: 33400.9
+[550]	valid_0's l2: 33173.5
+[600]	valid_0's l2: 32944.2
+[650]	valid_0's l2: 32778.9
+[700]	valid_0's l2: 32628.8
+[750]	valid_0's l2: 32471.8
+[800]	valid_0's l2: 32348.1
+[850]	valid_0's l2: 32218.9
+[900]	valid_0's l2: 32125.4
+[950]	valid_0's l2: 32035.4
+[1000]	valid_0's l2: 31938.4
+Did not meet early stopping. Best iteration is:
+[1000]	valid_0's l2: 31938.4
+[모델B] MAE: 121.4초  RMSE: 178.7초  (평균 입석시간: 343.8초)
+
+[모델B 피처 중요도]
+alight_stop_id    9396
+board_stop_id     9115
+headway_sec       4336
+hour              2724
+route_id          2388
+weekday           1266
+weather            401
+bus_type_code      301
+usertype_code       73
+is_holiday           0
+seat_capacity        0
+dtype: int32

@@ -1,0 +1,1 @@
+{"columns":["feature","importance"],"data":[["board_stop_id",13075],["alight_stop_id",8861],["route_id",2820],["hour",2332],["headway_sec",1503],["weekday",1072],["weather",201],["usertype_code",103],["bus_type_code",31],["seat_capacity",2],["is_holiday",0]]}
