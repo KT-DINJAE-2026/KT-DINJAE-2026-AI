@@ -1,4 +1,7 @@
 import time
+import os
+import json
+import subprocess
 import pandas as pd
 import lightgbm as lgb
 import wandb
@@ -8,10 +11,19 @@ from sklearn.metrics import roc_auc_score, accuracy_score, mean_absolute_error, 
 from datetime import datetime
 import sys
 
-# ── 실행 시각 기록: 파일명/실험명 구분용 ──────────────
-RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
+# ── 0. 경로 설정 ──────────────────────────────────────
+# 이 파일은 <레포>/src/train_models_wandb.py 위치이므로, 레포 루트는 한 단계 위
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_DIR = os.path.dirname(SCRIPT_DIR)
+EXPERIMENTS_DIR = os.path.join(REPO_DIR, "experiments")
 
-# ── 로그 저장 설정: print() 출력을 콘솔 + train_log 파일에 동시 기록 ──
+AUTO_PUSH = False  # 처음엔 False로 테스트, 폴더/파일 확인되면 True로 변경
+
+RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
+RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
+os.makedirs(RUN_DIR, exist_ok=True)
+
+# ── 로그 저장 설정: print() 출력을 콘솔 + 실험 폴더 안 train_log.txt에 동시 기록 ──
 class Tee:
     def __init__(self, *files):
         self.files = files
@@ -23,7 +35,8 @@ class Tee:
         for f in self.files:
             f.flush()
 
-log_file = open(f"train_log({RUN_TS}).txt", "w", encoding="utf-8")
+log_path = os.path.join(RUN_DIR, "train_log.txt")
+log_file = open(log_path, "w", encoding="utf-8")
 sys.stdout = Tee(sys.stdout, log_file)
 
 # ── STEP 1: 데이터 불러오기 + 확인 ───────────────────
@@ -102,7 +115,7 @@ wandb.log({
     ),
 })
 
-model_a_path = f"model_a({RUN_TS}).txt"
+model_a_path = os.path.join(RUN_DIR, "model_a.txt")
 model_a.booster_.save_model(model_a_path)
 artifact_a = wandb.Artifact("model_a", type="model")
 artifact_a.add_file(model_a_path)
@@ -161,7 +174,7 @@ wandb.log({
     ),
 })
 
-model_b_path = f"model_b({RUN_TS}).txt"
+model_b_path = os.path.join(RUN_DIR, "model_b.txt")
 model_b.booster_.save_model(model_b_path)
 artifact_b = wandb.Artifact("model_b", type="model")
 artifact_b.add_file(model_b_path)
@@ -169,3 +182,49 @@ wandb.log_artifact(artifact_b)
 wandb.finish()
 
 print(f"\n저장 완료: {model_a_path}, {model_b_path}")
+
+# ── STEP 7: metrics.json 저장 ─────────────────────────
+metrics = {
+    "run_ts": RUN_TS,
+    "n_estimators": 1000,
+    "learning_rate": 0.05,
+    "train_rows_a": len(X_train),
+    "train_rows_b": len(Xb_train),
+    "model_a": {"auc": auc_a, "accuracy": acc_a},
+    "model_b": {"mae": mae, "rmse": rmse},
+}
+metrics_path = os.path.join(RUN_DIR, "metrics.json")
+with open(metrics_path, "w", encoding="utf-8") as f:
+    json.dump(metrics, f, ensure_ascii=False, indent=2)
+print(f"metrics.json 저장 완료: {metrics_path}")
+
+# ── STEP 8: 로그 파일 닫고 stdout 원복 (git 명령 출력은 콘솔에만) ──
+sys.stdout = sys.stdout.files[0]
+log_file.close()
+
+# ── STEP 9: Git add + commit + push (AUTO_PUSH=True일 때만) ──
+def run_git(args):
+    result = subprocess.run(
+        ["git"] + args, cwd=REPO_DIR,
+        capture_output=True, text=True, encoding="utf-8"
+    )
+    print(f"$ git {' '.join(args)}")
+    print(result.stdout)
+    if result.returncode != 0:
+        print("⚠ git 에러:", result.stderr)
+    return result.returncode == 0
+
+rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
+
+if AUTO_PUSH:
+    ok = run_git(["add", rel_path])
+    if ok:
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+    if ok:
+        ok = run_git(["push"])
+    if ok:
+        print(f"\n✅ GitHub에 experiments/{RUN_TS}/ 업로드 완료")
+    else:
+        print(f"\n⚠ 자동 push 실패 — 수동으로 'git add {rel_path} && git commit && git push' 실행 필요")
+else:
+    print(f"\n(AUTO_PUSH 꺼짐) experiments/{RUN_TS}/ 폴더 생성만 완료 — 확인 후 AUTO_PUSH=True로 바꿔서 재실행하거나 수동으로 git add/commit/push 하세요.")
