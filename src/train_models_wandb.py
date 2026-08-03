@@ -22,7 +22,9 @@ AUTO_PUSH = True
 
 # ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
 N_ESTIMATORS = 5000
-LEARNING_RATE = 0.05
+LEARNING_RATE = 0.05      # default=0.05 (0.04, 0.03, 0.02 ...)
+NUM_LEAVES = 31            # default=31 (63, 127 ...)
+MIN_CHILD_SAMPLES = 50     # default=20 (50, 75, 100 ...)
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
@@ -91,12 +93,19 @@ wandb.init(
         "model": "A_classifier",
         "n_estimators": N_ESTIMATORS,
         "learning_rate": LEARNING_RATE,
+        "num_leaves": NUM_LEAVES,
+        "min_child_samples": MIN_CHILD_SAMPLES,
         "train_rows": len(X_train),
         "features": feature_cols,
     }
 )
 
-model_a = lgb.LGBMClassifier(n_estimators=N_ESTIMATORS, learning_rate=LEARNING_RATE)
+model_a = lgb.LGBMClassifier(
+    n_estimators=N_ESTIMATORS,
+    learning_rate=LEARNING_RATE,
+    num_leaves=NUM_LEAVES,
+    min_child_samples=MIN_CHILD_SAMPLES,
+)
 model_a.fit(
     X_train, y_train,
     categorical_feature=categorical_cols,
@@ -153,12 +162,19 @@ wandb.init(
         "model": "B_regressor",
         "n_estimators": N_ESTIMATORS,
         "learning_rate": LEARNING_RATE,
+        "num_leaves": NUM_LEAVES,
+        "min_child_samples": MIN_CHILD_SAMPLES,
         "train_rows": len(Xb_train),
         "features": feature_cols,
     }
 )
 
-model_b = lgb.LGBMRegressor(n_estimators=N_ESTIMATORS, learning_rate=LEARNING_RATE)
+model_b = lgb.LGBMRegressor(
+    n_estimators=N_ESTIMATORS,
+    learning_rate=LEARNING_RATE,
+    num_leaves=NUM_LEAVES,
+    min_child_samples=MIN_CHILD_SAMPLES,
+)
 model_b.fit(
     Xb_train, yb_train,
     categorical_feature=categorical_cols,
@@ -204,6 +220,8 @@ metrics = {
     "run_ts": RUN_TS,
     "n_estimators": N_ESTIMATORS,
     "learning_rate": LEARNING_RATE,
+    "num_leaves": NUM_LEAVES,
+    "min_child_samples": MIN_CHILD_SAMPLES,
     "train_rows_a": len(X_train),
     "train_rows_b": len(Xb_train),
     "model_a": {"auc": auc_a, "accuracy": acc_a},
@@ -235,7 +253,7 @@ rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
 if AUTO_PUSH:
     ok = run_git(["add", rel_path])
     if ok:
-        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, num_leaves={NUM_LEAVES}, min_child_samples={MIN_CHILD_SAMPLES}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
     if ok:
         ok = run_git(["push"])
     if ok:
