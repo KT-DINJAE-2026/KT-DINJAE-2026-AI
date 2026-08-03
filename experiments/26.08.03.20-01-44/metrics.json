@@ -1,0 +1,17 @@
+{
+  "run_ts": "26.08.03.20-01-44",
+  "n_estimators": 5000,
+  "learning_rate": 0.05,
+  "num_leaves": 31,
+  "min_child_samples": 50,
+  "train_rows_a": 7502931,
+  "train_rows_b": 736176,
+  "model_a": {
+    "auc": 0.9502156803720598,
+    "accuracy": 0.9329408823110752
+  },
+  "model_b": {
+    "mae": 116.24170560077843,
+    "rmse": 171.98336135649723
+  }
+}
