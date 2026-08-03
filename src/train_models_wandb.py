@@ -21,7 +21,7 @@ EXPERIMENTS_DIR = os.path.join(REPO_DIR, "experiments")
 AUTO_PUSH = True
 
 # ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
-N_ESTIMATORS = 3000
+N_ESTIMATORS = 4000
 LEARNING_RATE = 0.05
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
