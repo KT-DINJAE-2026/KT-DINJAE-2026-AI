@@ -24,7 +24,7 @@ AUTO_PUSH = True
 N_ESTIMATORS = 5000
 LEARNING_RATE = 0.05      # default=0.05 (0.04, 0.03, 0.02 ...)
 NUM_LEAVES = 31            # default=31 (63, 127 ...)
-MIN_CHILD_SAMPLES = 50     # default=20 (50, 75, 100 ...)
+MIN_CHILD_SAMPLES = 20     # default=20 (50, 75, 100 ...)
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
