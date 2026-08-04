@@ -1,12 +1,17 @@
-# 실제 학습 데이터 (용량 크고, TCD 원본 유래 데이터라 커밋 지양)
+# 실제 학습 데이터
 *.parquet
 !schema/TCD_학습용명부_예시스펙.parquet
 
-# 학습된 모델 아티팩트 (재생성되는 산출물) — 단, experiments/ 안 결과물은 예외로 허용
+# 학습된 모델 아티팩트
 models/
 *.txt
 !requirements.txt
 !experiments/**/*.txt
+experiments/**/model_a.txt
+experiments/**/model_b.txt
+
+# wandb 로컬 캐시/로그 (실제 기록은 wandb.ai 클라우드에 있음)
+wandb/
 
 # 파이썬 캐시
 __pycache__/
