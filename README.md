@@ -20,9 +20,8 @@ KT 디인재 프로젝트 AI 레포지토리
 ├── experiments/
 │   └── {실행시각}/                        # 실험별 결과 폴더 (train_models_wandb.py 실행 시 자동 생성)
 │       ├── train_log.txt
-│       ├── model_a.txt
-│       ├── model_b.txt
-│       └── metrics.json
+│       ├── metrics.json
+│       └── (model_a.txt, model_b.txt는 용량 초과로 git 제외 — wandb Artifacts에서 다운로드)
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -52,22 +51,23 @@ KT 디인재 프로젝트 AI 레포지토리
 
 트리 수만으로는 4000→5000 구간부터 개선폭이 소수점 셋째 자리 수준까지 줄어들어(수확체감), 다른 하이퍼파라미터로 전환.
 
-### 2단계 — 다른 하이퍼파라미터 조정 (5000트리 고정)
+### 2단계 — num_leaves 조정 (5000트리, min_child_samples=20 고정)
 
-| | min_child_samples=20 (기준) | min_child_samples=50 | num_leaves=63 |
+| | 31 (기준) | 63 | 127 |
 | --- | --- | --- | --- |
-| 모델A AUC | 0.9504 | 0.9502 (↓) | **0.9532** (↑↑) |
-| 모델A Accuracy | 93.30% | 93.29% (↓) | **93.45%** (↑↑) |
-| 모델B MAE | 116.0초 | 116.2초 (↓) | **112.3초** (↑↑) |
-| 모델B RMSE | 171.2초 | 172.0초 (↓) | **166.6초** (↑↑) |
+| 모델A AUC | 0.9504 | 0.9532 | **0.9564** (↑↑) |
+| 모델A Accuracy | 93.30% | 93.45% | **93.70%** (↑↑) |
+| 모델B MAE | 116.0초 | 112.3초 | **108.4초** (↑↑) |
+| 모델B RMSE | 171.2초 | 166.6초 | **162.4초** (↑↑) |
 
 - `min_child_samples`를 50으로 올린 건 오히려 미세하게 성능이 떨어짐 → 20(기본값)으로 유지
-- `num_leaves`를 31 → 63으로 늘린 게 지금까지 실험 중 **가장 큰 폭의 개선**. 트리 수를 늘려서 얻은 것보다 트리 하나의 표현력을 키운 게 더 효과적이었음
-- 다음 실험은 `num_leaves`를 더 키워보거나(127 등), `learning_rate`를 낮춰보는 방향으로 진행 예정
+- `num_leaves`는 31 → 63 → 127로 늘릴 때마다 개선폭이 줄지 않고 오히려 유지되거나 커지는 추세. 지금까지 실험 중 가장 효과적인 파라미터
+- 다음 실험은 `num_leaves`를 255까지 더 늘려보거나, 과적합 여부를 확인하기 위해 학습/검증 성능 격차를 점검할 계획
 
 - 피처 중요도: 승하차 정류장 > 노선·시각 > 배차간격·요일 순. 공휴일·좌석수는 기여도 거의 없음(4월 데이터에 공휴일 부재로 추정)
 - wandb 대시보드: `https://wandb.ai/newhaneul-inha-university/bus-standing-prediction`
-- 실험 결과 히스토리는 `experiments/` 폴더에 타임스탬프별로 누적 (최신: `experiments/26.08.04.15-08-18`)
+- 실험 결과 히스토리는 `experiments/` 폴더에 타임스탬프별로 누적 (최신: `experiments/26.08.04.17-33-07`)
+- ⚠️ `num_leaves=127`부터 모델 파일(`model_a.txt` 103MB, `model_b.txt` 68MB)이 GitHub 용량 제한을 초과 — **`model_a.txt`/`model_b.txt`는 git 추적에서 제외**하고 `wandb` Artifacts로만 관리 (`.gitignore`에 `experiments/**/model_a.txt`, `experiments/**/model_b.txt`, `wandb/` 반영)
 
 ## 모델 파이프라인 상세
 
@@ -78,6 +78,7 @@ KT 디인재 프로젝트 AI 레포지토리
    - 모델B: 모델A 정답이 `Y`인 행만 필터링해서 `standing_seconds` 회귀
    - 저장 포맷은 `.txt`(LightGBM 네이티브) — `.pkl`/`joblib`은 파이썬 전용이라 백엔드가 Spring(Java)이면 못 읽음. `.txt`는 LightGBM 공식 포맷이라 Java 쪽 LightGBM 바인딩으로도 로드 가능
    - ⚠️ 백엔드가 Java에서 이 `.txt`를 직접 로드할지, 아니면 AI가 별도 Python 추론 서버를 띄우고 백엔드가 API로 호출할지는 **아직 미정 — 다음 회의 안건**
+   - 모델 파일 실물은 로컬 `experiments/{타임스탬프}/`와 wandb Artifacts에서 확인 가능 (git 저장소에는 없음)
 2. **`inference.py`** — 학습된 모델A/B를 합쳐서 API 응답 JSON을 생성
 
 ### 입력
@@ -100,4 +101,44 @@ KT 디인재 프로젝트 AI 레포지토리
 | --- | --- | --- |
 | `STANDING_PROBA_THRESHOLD` | 0.5 | 모델A 확률이 이 이상이면 "입석"으로 확정 |
 | `RISK_MEDIUM_SEC` | 300초 | 입석시간이 이하면 "보통", 초과면 "높음" (기획서 "5분 이하/초과" 기준 그대로 적용. 팀에서 논의된 "전체 탑승시간 n%" 기준은 아직 미정이라 시간 기준으로 임시 적용) |
-|
+| `MIN_SAMPLE_COUNT` | 30 | 표본이 이보다 적으면 `INSUFFICIENT_DATA` |
+
+### 출력
+
+```json
+{
+  "dataStatus": "SUCCESS",       // or "INSUFFICIENT_DATA"
+  "isStanding": "Y",
+  "standingSeconds": 423,
+  "riskLevel": "MEDIUM",         // LOW/MEDIUM/HIGH = 기획서의 낮음/보통/높음
+  "confidence": 0.812
+}
+```
+
+### 최종적으로 백엔드에 넘길 것
+
+1. `model_a.txt`, `model_b.txt` — 학습된 모델 파일 (wandb Artifacts에서 다운로드해서 전달)
+2. `predict_journey()` 함수 스펙 — 위 입력/출력 구조
+3. 임계값 확정본 — 위 3개 상수를 팀 회의로 정한 뒤 문서화
+
+## 실행
+
+```bash
+pip install -r requirements.txt
+
+# 정식 학습 (300트리)
+python src/train_models.py
+
+# 실험용 학습 (하이퍼파라미터는 스크립트 상단에서 조정, 결과 자동으로 experiments/ 저장 및 push)
+python src/train_models_wandb.py
+
+# 추론 예시
+python src/inference.py
+```
+
+## 현재 미확정 사항
+
+- `RISK_MEDIUM_SEC`, `STANDING_PROBA_THRESHOLD`, `MIN_SAMPLE_COUNT` 등 임계값 팀 확정 필요
+- 모델 서빙 방식(백엔드가 `.txt` 모델을 직접 로드 vs AI가 별도 추론 서버 운영) 결정 필요
+- 교통약자 판별 범위(국가유공자/일반인 포함 여부), 임산부 식별 방안 — `docs/20260724.md` 액션 아이템 참고
+- 정류장/노선 ID가 국토부 표준 ID 체계인지 백엔드와 최종 확인 필요
