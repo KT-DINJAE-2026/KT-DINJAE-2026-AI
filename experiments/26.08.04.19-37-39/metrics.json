@@ -1,0 +1,43 @@
+{
+  "run_ts": "26.08.04.19-37-39",
+  "n_estimators": 5000,
+  "learning_rate": 0.05,
+  "num_leaves": 127,
+  "min_child_samples": 20,
+  "train_rows_a": 7502931,
+  "train_rows_b": 736176,
+  "model_a": {
+    "auc": 0.9563809365215018,
+    "accuracy": 0.9369745054333426
+  },
+  "model_b": {
+    "mae": 108.40184323611814,
+    "rmse": 162.44461125515292
+  },
+  "feature_importance_a_gain": {
+    "board_stop_id": 13033223.664661318,
+    "hour": 6395361.97574842,
+    "route_id": 4067883.1576640606,
+    "alight_stop_id": 3757642.3254442513,
+    "headway_sec": 2480735.770060241,
+    "weekday": 1293037.8491804898,
+    "weather": 124682.3197131753,
+    "bus_type_code": 74928.92180278897,
+    "usertype_code": 70395.86255690455,
+    "seat_capacity": 8442.124515324831,
+    "is_holiday": 0.0
+  },
+  "feature_importance_b_gain": {
+    "board_stop_id": 299874813799.02246,
+    "alight_stop_id": 130308432556.04004,
+    "headway_sec": 56949963945.05371,
+    "route_id": 54464135790.363525,
+    "hour": 47474884706.48511,
+    "weekday": 11064078061.643066,
+    "bus_type_code": 3200016873.916504,
+    "weather": 2710843537.072754,
+    "usertype_code": 405698275.28637695,
+    "seat_capacity": 77540.203125,
+    "is_holiday": 0.0
+  }
+}
