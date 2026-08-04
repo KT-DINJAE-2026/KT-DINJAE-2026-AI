@@ -109,7 +109,8 @@ model_a = lgb.LGBMClassifier(
 model_a.fit(
     X_train, y_train,
     categorical_feature=categorical_cols,
-    eval_set=[(X_test, y_test)],
+    eval_set=[(X_train, y_train), (X_test, y_test)],
+    eval_names=['train', 'valid'],
     callbacks=[
         lgb.early_stopping(30),
         lgb.log_evaluation(50),
@@ -125,16 +126,30 @@ acc_a = accuracy_score(y_test, pred)
 print("[모델A] AUC:", auc_a)
 print("[모델A] Accuracy:", acc_a)
 
-imp_a = pd.Series(model_a.feature_importances_, index=feature_cols).sort_values(ascending=False)
-print("\n[모델A 피처 중요도]")
-print(imp_a)
+# 피처 중요도: split(분기 횟수) 기준
+imp_a_split = pd.Series(model_a.feature_importances_, index=feature_cols).sort_values(ascending=False)
+print("\n[모델A 피처 중요도 - split]")
+print(imp_a_split)
+
+# 피처 중요도: gain(실제 예측 개선 기여도) 기준 — 연속형 피처가 분기 횟수만 많고
+# 실제 기여도는 낮은지(과적합 신호) 확인용
+imp_a_gain = pd.Series(
+    model_a.booster_.feature_importance(importance_type='gain'),
+    index=feature_cols
+).sort_values(ascending=False)
+print("\n[모델A 피처 중요도 - gain]")
+print(imp_a_gain)
 
 wandb.log({
     "model_a/AUC": auc_a,
     "model_a/Accuracy": acc_a,
-    "model_a/feature_importance": wandb.plot.bar(
-        wandb.Table(data=[[k, v] for k, v in imp_a.items()], columns=["feature", "importance"]),
-        "feature", "importance", title="Model A Feature Importance"
+    "model_a/feature_importance_split": wandb.plot.bar(
+        wandb.Table(data=[[k, v] for k, v in imp_a_split.items()], columns=["feature", "importance"]),
+        "feature", "importance", title="Model A Feature Importance (split)"
+    ),
+    "model_a/feature_importance_gain": wandb.plot.bar(
+        wandb.Table(data=[[k, v] for k, v in imp_a_gain.items()], columns=["feature", "importance"]),
+        "feature", "importance", title="Model A Feature Importance (gain)"
     ),
 })
 
@@ -178,7 +193,8 @@ model_b = lgb.LGBMRegressor(
 model_b.fit(
     Xb_train, yb_train,
     categorical_feature=categorical_cols,
-    eval_set=[(Xb_test, yb_test)],
+    eval_set=[(Xb_train, yb_train), (Xb_test, yb_test)],
+    eval_names=['train', 'valid'],
     callbacks=[
         lgb.early_stopping(30),
         lgb.log_evaluation(50),
@@ -192,16 +208,27 @@ mae = mean_absolute_error(yb_test, pred_b)
 rmse = mean_squared_error(yb_test, pred_b) ** 0.5
 print(f"[모델B] MAE: {mae:.1f}초  RMSE: {rmse:.1f}초  (평균 입석시간: {yb.mean():.1f}초)")
 
-imp_b = pd.Series(model_b.feature_importances_, index=feature_cols).sort_values(ascending=False)
-print("\n[모델B 피처 중요도]")
-print(imp_b)
+imp_b_split = pd.Series(model_b.feature_importances_, index=feature_cols).sort_values(ascending=False)
+print("\n[모델B 피처 중요도 - split]")
+print(imp_b_split)
+
+imp_b_gain = pd.Series(
+    model_b.booster_.feature_importance(importance_type='gain'),
+    index=feature_cols
+).sort_values(ascending=False)
+print("\n[모델B 피처 중요도 - gain]")
+print(imp_b_gain)
 
 wandb.log({
     "model_b/MAE": mae,
     "model_b/RMSE": rmse,
-    "model_b/feature_importance": wandb.plot.bar(
-        wandb.Table(data=[[k, v] for k, v in imp_b.items()], columns=["feature", "importance"]),
-        "feature", "importance", title="Model B Feature Importance"
+    "model_b/feature_importance_split": wandb.plot.bar(
+        wandb.Table(data=[[k, v] for k, v in imp_b_split.items()], columns=["feature", "importance"]),
+        "feature", "importance", title="Model B Feature Importance (split)"
+    ),
+    "model_b/feature_importance_gain": wandb.plot.bar(
+        wandb.Table(data=[[k, v] for k, v in imp_b_gain.items()], columns=["feature", "importance"]),
+        "feature", "importance", title="Model B Feature Importance (gain)"
     ),
 })
 
@@ -226,6 +253,8 @@ metrics = {
     "train_rows_b": len(Xb_train),
     "model_a": {"auc": auc_a, "accuracy": acc_a},
     "model_b": {"mae": mae, "rmse": rmse},
+    "feature_importance_a_gain": imp_a_gain.to_dict(),
+    "feature_importance_b_gain": imp_b_gain.to_dict(),
 }
 metrics_path = os.path.join(RUN_DIR, "metrics.json")
 with open(metrics_path, "w", encoding="utf-8") as f:
