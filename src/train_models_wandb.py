@@ -22,7 +22,7 @@ AUTO_PUSH = True
 
 # ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
 N_ESTIMATORS = 5000
-LEARNING_RATE = 0.04      # default=0.05 (0.04, 0.03, 0.02 ...)
+LEARNING_RATE = 0.05      # default=0.05 (0.04, 0.03, 0.02 ...)
 NUM_LEAVES = 127            # default=31 (63, 127 ...)
 MIN_CHILD_SAMPLES = 20     # default=20 (50, 75, 100 ...)
 
