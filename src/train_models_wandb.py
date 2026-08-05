@@ -22,9 +22,12 @@ AUTO_PUSH = True
 
 # ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
 N_ESTIMATORS = 5000
-LEARNING_RATE = 0.05      # default=0.05 (0.04, 0.03, 0.02 ...)
+LEARNING_RATE = 0.05        # default=0.05 (0.04, 0.03, 0.02 ...) — 원래 기준값으로 복귀
 NUM_LEAVES = 127            # default=31 (63, 127 ...)
-MIN_CHILD_SAMPLES = 20     # default=20 (50, 75, 100 ...)
+MIN_CHILD_SAMPLES = 20      # default=20 (50, 75, 100 ...)
+FEATURE_FRACTION = 0.8      # default=1.0 — 트리마다 피처를 80%만 랜덤 사용 (과적합 억제)
+BAGGING_FRACTION = 1.0      # default=1.0 — 트리마다 데이터를 80%만 랜덤 샘플링 (과적합 억제)
+BAGGING_FREQ = 0            # default=0 — 몇 iteration마다 bagging을 수행할지 (0이면 bagging 비활성)
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
@@ -95,6 +98,9 @@ wandb.init(
         "learning_rate": LEARNING_RATE,
         "num_leaves": NUM_LEAVES,
         "min_child_samples": MIN_CHILD_SAMPLES,
+        "feature_fraction": FEATURE_FRACTION,
+        "bagging_fraction": BAGGING_FRACTION,
+        "bagging_freq": BAGGING_FREQ,
         "train_rows": len(X_train),
         "features": feature_cols,
     }
@@ -105,6 +111,9 @@ model_a = lgb.LGBMClassifier(
     learning_rate=LEARNING_RATE,
     num_leaves=NUM_LEAVES,
     min_child_samples=MIN_CHILD_SAMPLES,
+    feature_fraction=FEATURE_FRACTION,
+    bagging_fraction=BAGGING_FRACTION,
+    bagging_freq=BAGGING_FREQ,
 )
 model_a.fit(
     X_train, y_train,
@@ -179,6 +188,9 @@ wandb.init(
         "learning_rate": LEARNING_RATE,
         "num_leaves": NUM_LEAVES,
         "min_child_samples": MIN_CHILD_SAMPLES,
+        "feature_fraction": FEATURE_FRACTION,
+        "bagging_fraction": BAGGING_FRACTION,
+        "bagging_freq": BAGGING_FREQ,
         "train_rows": len(Xb_train),
         "features": feature_cols,
     }
@@ -189,6 +201,9 @@ model_b = lgb.LGBMRegressor(
     learning_rate=LEARNING_RATE,
     num_leaves=NUM_LEAVES,
     min_child_samples=MIN_CHILD_SAMPLES,
+    feature_fraction=FEATURE_FRACTION,
+    bagging_fraction=BAGGING_FRACTION,
+    bagging_freq=BAGGING_FREQ,
 )
 model_b.fit(
     Xb_train, yb_train,
@@ -249,6 +264,9 @@ metrics = {
     "learning_rate": LEARNING_RATE,
     "num_leaves": NUM_LEAVES,
     "min_child_samples": MIN_CHILD_SAMPLES,
+    "feature_fraction": FEATURE_FRACTION,
+    "bagging_fraction": BAGGING_FRACTION,
+    "bagging_freq": BAGGING_FREQ,
     "train_rows_a": len(X_train),
     "train_rows_b": len(Xb_train),
     "model_a": {"auc": auc_a, "accuracy": acc_a},
@@ -282,7 +300,7 @@ rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
 if AUTO_PUSH:
     ok = run_git(["add", rel_path])
     if ok:
-        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, num_leaves={NUM_LEAVES}, min_child_samples={MIN_CHILD_SAMPLES}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, num_leaves={NUM_LEAVES}, feature_fraction={FEATURE_FRACTION}, bagging_fraction={BAGGING_FRACTION}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
     if ok:
         ok = run_git(["push"])
     if ok:
