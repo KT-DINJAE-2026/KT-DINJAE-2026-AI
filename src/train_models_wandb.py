@@ -25,9 +25,9 @@ N_ESTIMATORS = 5000
 LEARNING_RATE = 0.05        # default=0.05 (0.04, 0.03, 0.02 ...) — 원래 기준값으로 복귀
 NUM_LEAVES = 127            # default=31 (63, 127 ...)
 MIN_CHILD_SAMPLES = 20      # default=20 (50, 75, 100 ...)
-FEATURE_FRACTION = 0.8      # default=1.0 — 트리마다 피처를 80%만 랜덤 사용 (과적합 억제)
+FEATURE_FRACTION = 1.0      # default=1.0 — 트리마다 피처를 80%만 랜덤 사용 (과적합 억제)
 BAGGING_FRACTION = 1.0      # default=1.0 — 트리마다 데이터를 80%만 랜덤 샘플링 (과적합 억제)
-BAGGING_FREQ = 0            # default=0 — 몇 iteration마다 bagging을 수행할지 (0이면 bagging 비활성)
+BAGGING_FREQ = 5            # default=0 — 몇 iteration마다 bagging을 수행할지 (0이면 bagging 비활성)
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
