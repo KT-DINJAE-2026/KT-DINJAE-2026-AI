@@ -1,0 +1,336 @@
+로딩 시간: 13.1초
+(9549276, 18)
+trip_round_id                           0
+route_id                                0
+board_stop_id                           0
+alight_stop_id                     170612
+board_datetime                          0
+weekday                                 0
+hour                                    0
+is_holiday                              0
+weather                                 0
+headway_sec                        152139
+bus_type_code                           0
+bus_type_name                           0
+seat_capacity                           0
+usertype_code                           0
+usertype_name                           0
+is_standing                             0
+standing_seconds                       28
+sample_count_route_segment_hour         0
+dtype: int64
+결측 제외 후: (9378664, 18)
+y_standing
+0    8458443
+1     920221
+Name: count, dtype: int64
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Number of positive: 736177, number of negative: 6766754
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.458065 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 2569
+[LightGBM] [Info] Number of data points in the train set: 7502931, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.098119 -> initscore=-2.218306
+[LightGBM] [Info] Start training from score -2.218306
+Training until validation scores don't improve for 30 rounds
+[50]	train's binary_logloss: 0.189357	valid's binary_logloss: 0.190554
+[100]	train's binary_logloss: 0.171514	valid's binary_logloss: 0.173757
+[150]	train's binary_logloss: 0.164498	valid's binary_logloss: 0.167797
+[200]	train's binary_logloss: 0.160387	valid's binary_logloss: 0.164672
+[250]	train's binary_logloss: 0.157748	valid's binary_logloss: 0.162927
+[300]	train's binary_logloss: 0.155765	valid's binary_logloss: 0.161714
+[350]	train's binary_logloss: 0.154194	valid's binary_logloss: 0.16079
+[400]	train's binary_logloss: 0.152919	valid's binary_logloss: 0.160094
+[450]	train's binary_logloss: 0.151801	valid's binary_logloss: 0.159565
+[500]	train's binary_logloss: 0.150677	valid's binary_logloss: 0.159053
+[550]	train's binary_logloss: 0.149656	valid's binary_logloss: 0.158573
+[600]	train's binary_logloss: 0.148702	valid's binary_logloss: 0.158122
+[650]	train's binary_logloss: 0.147795	valid's binary_logloss: 0.157714
+[700]	train's binary_logloss: 0.146954	valid's binary_logloss: 0.15733
+[750]	train's binary_logloss: 0.146173	valid's binary_logloss: 0.157003
+[800]	train's binary_logloss: 0.145482	valid's binary_logloss: 0.15668
+[850]	train's binary_logloss: 0.14488	valid's binary_logloss: 0.1564
+[900]	train's binary_logloss: 0.144219	valid's binary_logloss: 0.156116
+[950]	train's binary_logloss: 0.143575	valid's binary_logloss: 0.155859
+[1000]	train's binary_logloss: 0.143126	valid's binary_logloss: 0.155661
+[1050]	train's binary_logloss: 0.142573	valid's binary_logloss: 0.155407
+[1100]	train's binary_logloss: 0.142061	valid's binary_logloss: 0.155179
+[1150]	train's binary_logloss: 0.141564	valid's binary_logloss: 0.154956
+[1200]	train's binary_logloss: 0.141176	valid's binary_logloss: 0.154794
+[1250]	train's binary_logloss: 0.140776	valid's binary_logloss: 0.154605
+[1300]	train's binary_logloss: 0.140332	valid's binary_logloss: 0.154394
+[1350]	train's binary_logloss: 0.139975	valid's binary_logloss: 0.154215
+[1400]	train's binary_logloss: 0.139542	valid's binary_logloss: 0.154026
+[1450]	train's binary_logloss: 0.139211	valid's binary_logloss: 0.153925
+[1500]	train's binary_logloss: 0.138742	valid's binary_logloss: 0.153741
+[1550]	train's binary_logloss: 0.138335	valid's binary_logloss: 0.15354
+[1600]	train's binary_logloss: 0.138023	valid's binary_logloss: 0.153395
+[1650]	train's binary_logloss: 0.137533	valid's binary_logloss: 0.153186
+[1700]	train's binary_logloss: 0.137036	valid's binary_logloss: 0.152978
+[1750]	train's binary_logloss: 0.136637	valid's binary_logloss: 0.152845
+[1800]	train's binary_logloss: 0.136251	valid's binary_logloss: 0.15268
+[1850]	train's binary_logloss: 0.135867	valid's binary_logloss: 0.152515
+[1900]	train's binary_logloss: 0.135495	valid's binary_logloss: 0.152356
+[1950]	train's binary_logloss: 0.135228	valid's binary_logloss: 0.152238
+[2000]	train's binary_logloss: 0.134957	valid's binary_logloss: 0.152145
+[2050]	train's binary_logloss: 0.134638	valid's binary_logloss: 0.152014
+[2100]	train's binary_logloss: 0.134355	valid's binary_logloss: 0.151904
+[2150]	train's binary_logloss: 0.134033	valid's binary_logloss: 0.151752
+[2200]	train's binary_logloss: 0.133809	valid's binary_logloss: 0.151668
+[2250]	train's binary_logloss: 0.133549	valid's binary_logloss: 0.151573
+[2300]	train's binary_logloss: 0.133282	valid's binary_logloss: 0.151463
+[2350]	train's binary_logloss: 0.133017	valid's binary_logloss: 0.151342
+[2400]	train's binary_logloss: 0.132707	valid's binary_logloss: 0.151212
+[2450]	train's binary_logloss: 0.132461	valid's binary_logloss: 0.151104
+[2500]	train's binary_logloss: 0.132182	valid's binary_logloss: 0.15099
+[2550]	train's binary_logloss: 0.131937	valid's binary_logloss: 0.150905
+[2600]	train's binary_logloss: 0.131615	valid's binary_logloss: 0.150774
+[2650]	train's binary_logloss: 0.131391	valid's binary_logloss: 0.150694
+[2700]	train's binary_logloss: 0.131157	valid's binary_logloss: 0.150587
+[2750]	train's binary_logloss: 0.130902	valid's binary_logloss: 0.150459
+[2800]	train's binary_logloss: 0.130626	valid's binary_logloss: 0.150366
+[2850]	train's binary_logloss: 0.130394	valid's binary_logloss: 0.150249
+[2900]	train's binary_logloss: 0.130177	valid's binary_logloss: 0.150158
+[2950]	train's binary_logloss: 0.129905	valid's binary_logloss: 0.150039
+[3000]	train's binary_logloss: 0.129623	valid's binary_logloss: 0.149917
+[3050]	train's binary_logloss: 0.129397	valid's binary_logloss: 0.14984
+[3100]	train's binary_logloss: 0.129129	valid's binary_logloss: 0.149736
+[3150]	train's binary_logloss: 0.128906	valid's binary_logloss: 0.149643
+[3200]	train's binary_logloss: 0.128638	valid's binary_logloss: 0.149522
+[3250]	train's binary_logloss: 0.128382	valid's binary_logloss: 0.149427
+[3300]	train's binary_logloss: 0.128135	valid's binary_logloss: 0.149299
+[3350]	train's binary_logloss: 0.127894	valid's binary_logloss: 0.149223
+[3400]	train's binary_logloss: 0.127693	valid's binary_logloss: 0.149163
+[3450]	train's binary_logloss: 0.12742	valid's binary_logloss: 0.149044
+[3500]	train's binary_logloss: 0.127224	valid's binary_logloss: 0.148962
+[3550]	train's binary_logloss: 0.127006	valid's binary_logloss: 0.148883
+[3600]	train's binary_logloss: 0.126789	valid's binary_logloss: 0.148795
+[3650]	train's binary_logloss: 0.126553	valid's binary_logloss: 0.148701
+[3700]	train's binary_logloss: 0.12629	valid's binary_logloss: 0.1486
+[3750]	train's binary_logloss: 0.126062	valid's binary_logloss: 0.148519
+[3800]	train's binary_logloss: 0.125798	valid's binary_logloss: 0.148408
+[3850]	train's binary_logloss: 0.12556	valid's binary_logloss: 0.148337
+[3900]	train's binary_logloss: 0.125371	valid's binary_logloss: 0.148278
+[3950]	train's binary_logloss: 0.125189	valid's binary_logloss: 0.14819
+[4000]	train's binary_logloss: 0.124968	valid's binary_logloss: 0.148096
+[4050]	train's binary_logloss: 0.124756	valid's binary_logloss: 0.148026
+[4100]	train's binary_logloss: 0.124546	valid's binary_logloss: 0.147945
+[4150]	train's binary_logloss: 0.124331	valid's binary_logloss: 0.147875
+[4200]	train's binary_logloss: 0.124167	valid's binary_logloss: 0.147808
+[4250]	train's binary_logloss: 0.123998	valid's binary_logloss: 0.147739
+[4300]	train's binary_logloss: 0.123771	valid's binary_logloss: 0.147643
+[4350]	train's binary_logloss: 0.123546	valid's binary_logloss: 0.147544
+[4400]	train's binary_logloss: 0.123307	valid's binary_logloss: 0.147443
+[4450]	train's binary_logloss: 0.123099	valid's binary_logloss: 0.147351
+[4500]	train's binary_logloss: 0.122897	valid's binary_logloss: 0.147269
+[4550]	train's binary_logloss: 0.12267	valid's binary_logloss: 0.147197
+[4600]	train's binary_logloss: 0.122454	valid's binary_logloss: 0.147128
+[4650]	train's binary_logloss: 0.122239	valid's binary_logloss: 0.147062
+[4700]	train's binary_logloss: 0.122026	valid's binary_logloss: 0.146991
+[4750]	train's binary_logloss: 0.121821	valid's binary_logloss: 0.146928
+[4800]	train's binary_logloss: 0.121613	valid's binary_logloss: 0.146862
+[4850]	train's binary_logloss: 0.121408	valid's binary_logloss: 0.146785
+[4900]	train's binary_logloss: 0.121189	valid's binary_logloss: 0.146686
+[4950]	train's binary_logloss: 0.120965	valid's binary_logloss: 0.146594
+[5000]	train's binary_logloss: 0.120803	valid's binary_logloss: 0.146531
+Did not meet early stopping. Best iteration is:
+[5000]	train's binary_logloss: 0.120803	valid's binary_logloss: 0.146531
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[모델A] AUC: 0.9572437113502116
+[모델A] Accuracy: 0.9370885941655875
+
+[모델A 피처 중요도 - split]
+headway_sec       241933
+alight_stop_id    111869
+hour              101014
+board_stop_id      72518
+route_id           33280
+weekday            26471
+bus_type_code      22913
+weather            12440
+seat_capacity       4680
+usertype_code       2882
+is_holiday             0
+dtype: int32
+
+[모델A 피처 중요도 - gain]
+board_stop_id     1.159795e+07
+hour              6.206527e+06
+alight_stop_id    4.678559e+06
+route_id          3.999566e+06
+headway_sec       2.424125e+06
+weekday           1.346531e+06
+weather           1.518018e+05
+bus_type_code     1.044771e+05
+usertype_code     8.329526e+04
+seat_capacity     1.797793e+04
+is_holiday        0.000000e+00
+dtype: float64
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.031881 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 1685
+[LightGBM] [Info] Number of data points in the train set: 736176, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Start training from score 344.160046
+Training until validation scores don't improve for 30 rounds
+[50]	train's l2: 38604.6	valid's l2: 38929.6
+[100]	train's l2: 33163.9	valid's l2: 34512.4
+[150]	train's l2: 30815.9	valid's l2: 32902.8
+[200]	train's l2: 29465.4	valid's l2: 32071.9
+[250]	train's l2: 28590	valid's l2: 31557.2
+[300]	train's l2: 27862.5	valid's l2: 31123.1
+[350]	train's l2: 27329.8	valid's l2: 30807.3
+[400]	train's l2: 26926.5	valid's l2: 30592.2
+[450]	train's l2: 26480.9	valid's l2: 30374.2
+[500]	train's l2: 26114.5	valid's l2: 30201.2
+[550]	train's l2: 25801.5	valid's l2: 30038
+[600]	train's l2: 25541.9	valid's l2: 29905.2
+[650]	train's l2: 25264.7	valid's l2: 29750.4
+[700]	train's l2: 25007.2	valid's l2: 29636.8
+[750]	train's l2: 24770.1	valid's l2: 29540.8
+[800]	train's l2: 24541.8	valid's l2: 29425.5
+[850]	train's l2: 24314.7	valid's l2: 29302.7
+[900]	train's l2: 24092.3	valid's l2: 29199.6
+[950]	train's l2: 23841.8	valid's l2: 29074.8
+[1000]	train's l2: 23676.3	valid's l2: 29001.7
+[1050]	train's l2: 23485.2	valid's l2: 28904.4
+[1100]	train's l2: 23295.4	valid's l2: 28807.5
+[1150]	train's l2: 23082.2	valid's l2: 28699.1
+[1200]	train's l2: 22910.5	valid's l2: 28622.4
+[1250]	train's l2: 22711.3	valid's l2: 28531.6
+[1300]	train's l2: 22514.6	valid's l2: 28421.2
+[1350]	train's l2: 22343.7	valid's l2: 28341.1
+[1400]	train's l2: 22196.4	valid's l2: 28283.7
+[1450]	train's l2: 22044.2	valid's l2: 28227.5
+[1500]	train's l2: 21897.2	valid's l2: 28166.2
+[1550]	train's l2: 21746.2	valid's l2: 28094.6
+[1600]	train's l2: 21602	valid's l2: 28028.6
+[1650]	train's l2: 21446.6	valid's l2: 27962.3
+[1700]	train's l2: 21304.6	valid's l2: 27894.8
+[1750]	train's l2: 21163.3	valid's l2: 27839.9
+[1800]	train's l2: 21025.4	valid's l2: 27783.2
+[1850]	train's l2: 20892.1	valid's l2: 27716
+[1900]	train's l2: 20749.2	valid's l2: 27647.1
+[1950]	train's l2: 20612.1	valid's l2: 27582.7
+[2000]	train's l2: 20492.1	valid's l2: 27534.2
+[2050]	train's l2: 20356.1	valid's l2: 27482.3
+[2100]	train's l2: 20230.2	valid's l2: 27430.7
+[2150]	train's l2: 20093.5	valid's l2: 27366.1
+[2200]	train's l2: 19977.6	valid's l2: 27320
+[2250]	train's l2: 19866.6	valid's l2: 27283.7
+[2300]	train's l2: 19755.4	valid's l2: 27235.8
+[2350]	train's l2: 19648.1	valid's l2: 27187.5
+[2400]	train's l2: 19543.1	valid's l2: 27148
+[2450]	train's l2: 19440.5	valid's l2: 27105.8
+[2500]	train's l2: 19328.1	valid's l2: 27054
+[2550]	train's l2: 19217.2	valid's l2: 27007.2
+[2600]	train's l2: 19120.9	valid's l2: 26973.9
+[2650]	train's l2: 19018.7	valid's l2: 26945.7
+[2700]	train's l2: 18927.9	valid's l2: 26907
+[2750]	train's l2: 18835.8	valid's l2: 26869.2
+[2800]	train's l2: 18739.4	valid's l2: 26837.5
+[2850]	train's l2: 18650.1	valid's l2: 26792.9
+[2900]	train's l2: 18555.3	valid's l2: 26752.4
+[2950]	train's l2: 18467.4	valid's l2: 26715.5
+[3000]	train's l2: 18387.3	valid's l2: 26687.3
+[3050]	train's l2: 18296.5	valid's l2: 26652.9
+[3100]	train's l2: 18196.2	valid's l2: 26611.9
+[3150]	train's l2: 18104.2	valid's l2: 26566.5
+[3200]	train's l2: 18023.9	valid's l2: 26541.6
+[3250]	train's l2: 17937.9	valid's l2: 26508.1
+[3300]	train's l2: 17864.6	valid's l2: 26484
+[3350]	train's l2: 17787.4	valid's l2: 26457
+[3400]	train's l2: 17701.5	valid's l2: 26423.9
+[3450]	train's l2: 17623	valid's l2: 26399.5
+[3500]	train's l2: 17551	valid's l2: 26376.8
+[3550]	train's l2: 17471.4	valid's l2: 26345.8
+[3600]	train's l2: 17395.7	valid's l2: 26321.3
+[3650]	train's l2: 17328.2	valid's l2: 26303.2
+[3700]	train's l2: 17254.2	valid's l2: 26274.9
+[3750]	train's l2: 17186.9	valid's l2: 26255.3
+[3800]	train's l2: 17117.3	valid's l2: 26228.9
+[3850]	train's l2: 17046.9	valid's l2: 26207.2
+[3900]	train's l2: 16980.1	valid's l2: 26188.5
+[3950]	train's l2: 16905	valid's l2: 26155.7
+[4000]	train's l2: 16829	valid's l2: 26121.7
+[4050]	train's l2: 16761.9	valid's l2: 26106.5
+[4100]	train's l2: 16693.5	valid's l2: 26077.8
+[4150]	train's l2: 16627.9	valid's l2: 26050.9
+[4200]	train's l2: 16562.5	valid's l2: 26026.2
+[4250]	train's l2: 16495.5	valid's l2: 26003.3
+[4300]	train's l2: 16424.3	valid's l2: 25977.7
+[4350]	train's l2: 16348.8	valid's l2: 25937.1
+[4400]	train's l2: 16288.5	valid's l2: 25915.7
+[4450]	train's l2: 16219.8	valid's l2: 25889.5
+[4500]	train's l2: 16145.2	valid's l2: 25855.9
+[4550]	train's l2: 16083	valid's l2: 25840.4
+[4600]	train's l2: 16025.3	valid's l2: 25824.7
+[4650]	train's l2: 15968	valid's l2: 25808.4
+[4700]	train's l2: 15906.1	valid's l2: 25785.2
+[4750]	train's l2: 15848.5	valid's l2: 25765.9
+[4800]	train's l2: 15794.8	valid's l2: 25752.5
+[4850]	train's l2: 15733.6	valid's l2: 25724.1
+[4900]	train's l2: 15667.8	valid's l2: 25693.2
+[4950]	train's l2: 15611.4	valid's l2: 25668.7
+[5000]	train's l2: 15545.6	valid's l2: 25638.8
+Did not meet early stopping. Best iteration is:
+[5000]	train's l2: 15545.6	valid's l2: 25638.8
+[LightGBM] [Warning] feature_fraction is set=0.8, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=0.8
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[모델B] MAE: 107.7초  RMSE: 160.1초  (평균 입석시간: 343.8초)
+
+[모델B 피처 중요도 - split]
+headway_sec       276211
+hour              117877
+alight_stop_id     65426
+board_stop_id      56605
+route_id           37947
+weekday            33777
+bus_type_code      23069
+weather            14832
+usertype_code       2942
+seat_capacity       1314
+is_holiday             0
+dtype: int32
+
+[모델B 피처 중요도 - gain]
+board_stop_id     2.709611e+11
+alight_stop_id    1.348147e+11
+route_id          6.797949e+10
+headway_sec       5.591102e+10
+hour              5.142515e+10
+weekday           1.206444e+10
+bus_type_code     3.960507e+09
+weather           3.251880e+09
+usertype_code     6.846055e+08
+seat_capacity     2.787412e+08
+is_holiday        0.000000e+00
+dtype: float64
+
+저장 완료: D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.05.17-16-39\model_a.txt, D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.05.17-16-39\model_b.txt
+metrics.json 저장 완료: D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\지역사회 문제해결 프로젝트\KT-DINJAE-2026-AI\experiments\26.08.05.17-16-39\metrics.json
