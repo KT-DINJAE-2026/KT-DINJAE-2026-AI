@@ -20,10 +20,8 @@ EXPERIMENTS_DIR = os.path.join(REPO_DIR, "experiments")
 
 AUTO_PUSH = True
 
-# ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
+# ── 하이퍼파라미터: A/B 공통 ────────────────────────
 N_ESTIMATORS = 5000
-NUM_LEAVES = 127
-MIN_CHILD_SAMPLES = 20
 FEATURE_FRACTION = 0.8
 BAGGING_FRACTION = 1.0
 BAGGING_FREQ = 0
@@ -31,10 +29,14 @@ BAGGING_FREQ = 0
 # 모델A(분류) 전용
 LEARNING_RATE_A = 0.1
 REG_LAMBDA_A = 1.0
+NUM_LEAVES_A = 63
+MIN_CHILD_SAMPLES_A = 20
 
 # 모델B(회귀) 전용
 LEARNING_RATE_B = 0.05
 REG_LAMBDA_B = 0.0
+NUM_LEAVES_B = 31
+MIN_CHILD_SAMPLES_B = 20
 
 # ── 검증 방식: True면 시간분할(과거→미래), False면 기존 랜덤분할 ──
 USE_TEMPORAL_SPLIT = True
@@ -117,8 +119,8 @@ wandb.init(
         "model": "A_classifier",
         "n_estimators": N_ESTIMATORS,
         "learning_rate": LEARNING_RATE_A,
-        "num_leaves": NUM_LEAVES,
-        "min_child_samples": MIN_CHILD_SAMPLES,
+        "num_leaves": NUM_LEAVES_A,
+        "min_child_samples": MIN_CHILD_SAMPLES_A,
         "feature_fraction": FEATURE_FRACTION,
         "bagging_fraction": BAGGING_FRACTION,
         "bagging_freq": BAGGING_FREQ,
@@ -132,8 +134,8 @@ wandb.init(
 model_a = lgb.LGBMClassifier(
     n_estimators=N_ESTIMATORS,
     learning_rate=LEARNING_RATE_A,
-    num_leaves=NUM_LEAVES,
-    min_child_samples=MIN_CHILD_SAMPLES,
+    num_leaves=NUM_LEAVES_A,
+    min_child_samples=MIN_CHILD_SAMPLES_A,
     feature_fraction=FEATURE_FRACTION,
     bagging_fraction=BAGGING_FRACTION,
     bagging_freq=BAGGING_FREQ,
@@ -215,8 +217,8 @@ wandb.init(
         "model": "B_regressor",
         "n_estimators": N_ESTIMATORS,
         "learning_rate": LEARNING_RATE_B,
-        "num_leaves": NUM_LEAVES,
-        "min_child_samples": MIN_CHILD_SAMPLES,
+        "num_leaves": NUM_LEAVES_B,
+        "min_child_samples": MIN_CHILD_SAMPLES_B,
         "feature_fraction": FEATURE_FRACTION,
         "bagging_fraction": BAGGING_FRACTION,
         "bagging_freq": BAGGING_FREQ,
@@ -230,8 +232,8 @@ wandb.init(
 model_b = lgb.LGBMRegressor(
     n_estimators=N_ESTIMATORS,
     learning_rate=LEARNING_RATE_B,
-    num_leaves=NUM_LEAVES,
-    min_child_samples=MIN_CHILD_SAMPLES,
+    num_leaves=NUM_LEAVES_B,
+    min_child_samples=MIN_CHILD_SAMPLES_B,
     feature_fraction=FEATURE_FRACTION,
     bagging_fraction=BAGGING_FRACTION,
     bagging_freq=BAGGING_FREQ,
@@ -293,15 +295,17 @@ print(f"\n저장 완료: {model_a_path}, {model_b_path}")
 metrics = {
     "run_ts": RUN_TS,
     "n_estimators": N_ESTIMATORS,
-    "num_leaves": NUM_LEAVES,
-    "min_child_samples": MIN_CHILD_SAMPLES,
     "feature_fraction": FEATURE_FRACTION,
     "bagging_fraction": BAGGING_FRACTION,
     "bagging_freq": BAGGING_FREQ,
     "learning_rate_a": LEARNING_RATE_A,
     "reg_lambda_a": REG_LAMBDA_A,
+    "num_leaves_a": NUM_LEAVES_A,
+    "min_child_samples_a": MIN_CHILD_SAMPLES_A,
     "learning_rate_b": LEARNING_RATE_B,
     "reg_lambda_b": REG_LAMBDA_B,
+    "num_leaves_b": NUM_LEAVES_B,
+    "min_child_samples_b": MIN_CHILD_SAMPLES_B,
     "split_type": "temporal" if USE_TEMPORAL_SPLIT else "random",
     "temporal_cutoff": TEMPORAL_CUTOFF if USE_TEMPORAL_SPLIT else None,
     "train_rows_a": len(X_train),
@@ -337,7 +341,7 @@ rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
 if AUTO_PUSH:
     ok = run_git(["add", rel_path])
     if ok:
-        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (split={'temporal' if USE_TEMPORAL_SPLIT else 'random'}, lr_a={LEARNING_RATE_A}, lambda_a={REG_LAMBDA_A}, lr_b={LEARNING_RATE_B}, lambda_b={REG_LAMBDA_B}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (split={'temporal' if USE_TEMPORAL_SPLIT else 'random'}, A: lr={LEARNING_RATE_A}/leaves={NUM_LEAVES_A}/min_child={MIN_CHILD_SAMPLES_A}/lambda={REG_LAMBDA_A}, B: lr={LEARNING_RATE_B}/leaves={NUM_LEAVES_B}/min_child={MIN_CHILD_SAMPLES_B}/lambda={REG_LAMBDA_B}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
     if ok:
         ok = run_git(["push"])
     if ok:
