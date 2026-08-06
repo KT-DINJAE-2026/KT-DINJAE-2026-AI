@@ -22,19 +22,30 @@ AUTO_PUSH = True
 
 # ── 하이퍼파라미터: 실험할 때 여기만 바꾸면 됨 ─────────
 N_ESTIMATORS = 5000
-LEARNING_RATE = 0.05        # default=0.05 (0.04, 0.03, 0.02 ...) — 원래 기준값으로 복귀
-NUM_LEAVES = 127            # default=31 (63, 127 ...)
-MIN_CHILD_SAMPLES = 20      # default=20 (50, 75, 100 ...)
-FEATURE_FRACTION = 1.0      # default=1.0 — 트리마다 피처를 80%만 랜덤 사용 (과적합 억제)
-BAGGING_FRACTION = 0.8      # default=1.0 — 트리마다 데이터를 80%만 랜덤 샘플링 (과적합 억제)
-BAGGING_FREQ = 5            # default=0 — 몇 iteration마다 bagging을 수행할지 (0이면 bagging 비활성)
+NUM_LEAVES = 127
+MIN_CHILD_SAMPLES = 20
+FEATURE_FRACTION = 0.8
+BAGGING_FRACTION = 1.0
+BAGGING_FREQ = 0
+
+# 모델A(분류) 전용
+LEARNING_RATE_A = 0.1
+REG_LAMBDA_A = 1.0
+
+# 모델B(회귀) 전용
+LEARNING_RATE_B = 0.05
+REG_LAMBDA_B = 0.0
+
+# ── 검증 방식: True면 시간분할(과거→미래), False면 기존 랜덤분할 ──
+USE_TEMPORAL_SPLIT = True
+# 4/1 04:00~4/24 03:59 학습, 4/24 04:00~5/1 03:59 검증
+TEMPORAL_CUTOFF = "2025-04-24 04:00:00"
 
 RUN_TS = datetime.now().strftime("%y.%m.%d.%H-%M-%S")
 RUN_DIR = os.path.join(EXPERIMENTS_DIR, RUN_TS)
 os.makedirs(RUN_DIR, exist_ok=True)
 
 # ── LightGBM 저장 우회 함수: 한글 경로에서 save_model()이 실패하는 문제 회피 ──
-# 영문 임시 폴더에 먼저 저장한 뒤, 파이썬 shutil로 최종(한글 포함) 경로에 복사
 def save_model_safely(booster, final_path):
     tmp_dir = tempfile.mkdtemp(prefix="lgbm_")
     tmp_path = os.path.join(tmp_dir, os.path.basename(final_path))
@@ -42,7 +53,7 @@ def save_model_safely(booster, final_path):
     shutil.copy(tmp_path, final_path)
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
-# ── 로그 저장 설정: print() 출력을 콘솔 + 실험 폴더 안 train_log.txt에 동시 기록 ──
+# ── 로그 저장 설정 ──────────────────────────────────
 class Tee:
     def __init__(self, *files):
         self.files = files
@@ -80,27 +91,39 @@ for col in categorical_cols:
 df["y_standing"] = (df["is_standing"] == "Y").astype(int)
 print(df["y_standing"].value_counts())
 
-# ── STEP 4: 학습/검증 분리 ──────────────────────────
-X = df[feature_cols]
-y = df["y_standing"]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)
+# ── STEP 4: 학습/검증 분리 (랜덤분할 or 시간분할) ─────
+if USE_TEMPORAL_SPLIT:
+    print(f"\n검증 방식: 시간분할 (기준시각={TEMPORAL_CUTOFF})")
+    cutoff = pd.Timestamp(TEMPORAL_CUTOFF)
+    train_mask = df["board_datetime"] < cutoff
+    X = df[feature_cols]
+    y = df["y_standing"]
+    X_train, y_train = X[train_mask], y[train_mask]
+    X_test, y_test = X[~train_mask], y[~train_mask]
+    print(f"학습 행: {len(X_train):,} / 검증 행: {len(X_test):,}")
+else:
+    print("\n검증 방식: 랜덤분할 (random_state=42)")
+    X = df[feature_cols]
+    y = df["y_standing"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
 
 # ── STEP 5: 모델A 학습 (입석여부 분류) ───────────────
 wandb.init(
     project="bus-standing-prediction",
-    name=f"model_a_{N_ESTIMATORS}trees_{RUN_TS}",
+    name=f"model_a_{N_ESTIMATORS}trees_{'temporal' if USE_TEMPORAL_SPLIT else 'random'}_{RUN_TS}",
     config={
         "model": "A_classifier",
         "n_estimators": N_ESTIMATORS,
-        "learning_rate": LEARNING_RATE,
+        "learning_rate": LEARNING_RATE_A,
         "num_leaves": NUM_LEAVES,
         "min_child_samples": MIN_CHILD_SAMPLES,
         "feature_fraction": FEATURE_FRACTION,
         "bagging_fraction": BAGGING_FRACTION,
         "bagging_freq": BAGGING_FREQ,
+        "reg_lambda": REG_LAMBDA_A,
+        "split_type": "temporal" if USE_TEMPORAL_SPLIT else "random",
         "train_rows": len(X_train),
         "features": feature_cols,
     }
@@ -108,12 +131,13 @@ wandb.init(
 
 model_a = lgb.LGBMClassifier(
     n_estimators=N_ESTIMATORS,
-    learning_rate=LEARNING_RATE,
+    learning_rate=LEARNING_RATE_A,
     num_leaves=NUM_LEAVES,
     min_child_samples=MIN_CHILD_SAMPLES,
     feature_fraction=FEATURE_FRACTION,
     bagging_fraction=BAGGING_FRACTION,
     bagging_freq=BAGGING_FREQ,
+    reg_lambda=REG_LAMBDA_A,
 )
 model_a.fit(
     X_train, y_train,
@@ -135,13 +159,10 @@ acc_a = accuracy_score(y_test, pred)
 print("[모델A] AUC:", auc_a)
 print("[모델A] Accuracy:", acc_a)
 
-# 피처 중요도: split(분기 횟수) 기준
 imp_a_split = pd.Series(model_a.feature_importances_, index=feature_cols).sort_values(ascending=False)
 print("\n[모델A 피처 중요도 - split]")
 print(imp_a_split)
 
-# 피처 중요도: gain(실제 예측 개선 기여도) 기준 — 연속형 피처가 분기 횟수만 많고
-# 실제 기여도는 낮은지(과적합 신호) 확인용
 imp_a_gain = pd.Series(
     model_a.booster_.feature_importance(importance_type='gain'),
     index=feature_cols
@@ -163,7 +184,7 @@ wandb.log({
 })
 
 model_a_path = os.path.join(RUN_DIR, "model_a.txt")
-save_model_safely(model_a.booster_, model_a_path)   # ← 우회 저장
+save_model_safely(model_a.booster_, model_a_path)
 
 artifact_a = wandb.Artifact("model_a", type="model")
 artifact_a.add_file(model_a_path)
@@ -172,25 +193,35 @@ wandb.finish()
 
 # ── STEP 6: 모델B 학습 (입석시간 회귀, 입석=Y만) ─────
 standing_df = df[df["y_standing"] == 1]
-Xb = standing_df[feature_cols]
-yb = standing_df["standing_seconds"]
 
-Xb_train, Xb_test, yb_train, yb_test = train_test_split(
-    Xb, yb, test_size=0.2, random_state=42
-)
+if USE_TEMPORAL_SPLIT:
+    train_mask_b = standing_df["board_datetime"] < cutoff
+    Xb = standing_df[feature_cols]
+    yb = standing_df["standing_seconds"]
+    Xb_train, yb_train = Xb[train_mask_b], yb[train_mask_b]
+    Xb_test, yb_test = Xb[~train_mask_b], yb[~train_mask_b]
+    print(f"\n[모델B] 학습 행: {len(Xb_train):,} / 검증 행: {len(Xb_test):,}")
+else:
+    Xb = standing_df[feature_cols]
+    yb = standing_df["standing_seconds"]
+    Xb_train, Xb_test, yb_train, yb_test = train_test_split(
+        Xb, yb, test_size=0.2, random_state=42
+    )
 
 wandb.init(
     project="bus-standing-prediction",
-    name=f"model_b_{N_ESTIMATORS}trees_{RUN_TS}",
+    name=f"model_b_{N_ESTIMATORS}trees_{'temporal' if USE_TEMPORAL_SPLIT else 'random'}_{RUN_TS}",
     config={
         "model": "B_regressor",
         "n_estimators": N_ESTIMATORS,
-        "learning_rate": LEARNING_RATE,
+        "learning_rate": LEARNING_RATE_B,
         "num_leaves": NUM_LEAVES,
         "min_child_samples": MIN_CHILD_SAMPLES,
         "feature_fraction": FEATURE_FRACTION,
         "bagging_fraction": BAGGING_FRACTION,
         "bagging_freq": BAGGING_FREQ,
+        "reg_lambda": REG_LAMBDA_B,
+        "split_type": "temporal" if USE_TEMPORAL_SPLIT else "random",
         "train_rows": len(Xb_train),
         "features": feature_cols,
     }
@@ -198,12 +229,13 @@ wandb.init(
 
 model_b = lgb.LGBMRegressor(
     n_estimators=N_ESTIMATORS,
-    learning_rate=LEARNING_RATE,
+    learning_rate=LEARNING_RATE_B,
     num_leaves=NUM_LEAVES,
     min_child_samples=MIN_CHILD_SAMPLES,
     feature_fraction=FEATURE_FRACTION,
     bagging_fraction=BAGGING_FRACTION,
     bagging_freq=BAGGING_FREQ,
+    reg_lambda=REG_LAMBDA_B,
 )
 model_b.fit(
     Xb_train, yb_train,
@@ -248,7 +280,7 @@ wandb.log({
 })
 
 model_b_path = os.path.join(RUN_DIR, "model_b.txt")
-save_model_safely(model_b.booster_, model_b_path)   # ← 우회 저장
+save_model_safely(model_b.booster_, model_b_path)
 
 artifact_b = wandb.Artifact("model_b", type="model")
 artifact_b.add_file(model_b_path)
@@ -261,12 +293,17 @@ print(f"\n저장 완료: {model_a_path}, {model_b_path}")
 metrics = {
     "run_ts": RUN_TS,
     "n_estimators": N_ESTIMATORS,
-    "learning_rate": LEARNING_RATE,
     "num_leaves": NUM_LEAVES,
     "min_child_samples": MIN_CHILD_SAMPLES,
     "feature_fraction": FEATURE_FRACTION,
     "bagging_fraction": BAGGING_FRACTION,
     "bagging_freq": BAGGING_FREQ,
+    "learning_rate_a": LEARNING_RATE_A,
+    "reg_lambda_a": REG_LAMBDA_A,
+    "learning_rate_b": LEARNING_RATE_B,
+    "reg_lambda_b": REG_LAMBDA_B,
+    "split_type": "temporal" if USE_TEMPORAL_SPLIT else "random",
+    "temporal_cutoff": TEMPORAL_CUTOFF if USE_TEMPORAL_SPLIT else None,
     "train_rows_a": len(X_train),
     "train_rows_b": len(Xb_train),
     "model_a": {"auc": auc_a, "accuracy": acc_a},
@@ -279,11 +316,11 @@ with open(metrics_path, "w", encoding="utf-8") as f:
     json.dump(metrics, f, ensure_ascii=False, indent=2)
 print(f"metrics.json 저장 완료: {metrics_path}")
 
-# ── STEP 8: 로그 파일 닫고 stdout 원복 (git 명령 출력은 콘솔에만) ──
+# ── STEP 8: 로그 파일 닫고 stdout 원복 ──────────────
 sys.stdout = sys.stdout.files[0]
 log_file.close()
 
-# ── STEP 9: Git add + commit + push (AUTO_PUSH=True일 때만) ──
+# ── STEP 9: Git add + commit + push ──────────────────
 def run_git(args):
     result = subprocess.run(
         ["git"] + args, cwd=REPO_DIR,
@@ -300,7 +337,7 @@ rel_path = os.path.relpath(RUN_DIR, REPO_DIR)
 if AUTO_PUSH:
     ok = run_git(["add", rel_path])
     if ok:
-        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (n_estimators={N_ESTIMATORS}, num_leaves={NUM_LEAVES}, feature_fraction={FEATURE_FRACTION}, bagging_fraction={BAGGING_FRACTION}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
+        ok = run_git(["commit", "-m", f"Add experiment result {RUN_TS} (split={'temporal' if USE_TEMPORAL_SPLIT else 'random'}, lr_a={LEARNING_RATE_A}, lambda_a={REG_LAMBDA_A}, lr_b={LEARNING_RATE_B}, lambda_b={REG_LAMBDA_B}, AUC={auc_a:.4f}, MAE={mae:.1f}s)"])
     if ok:
         ok = run_git(["push"])
     if ok:
