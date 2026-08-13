@@ -15,7 +15,7 @@ DATA_DIR = r"D:\프로젝트\KT디지털인재장학생('26.03.20~present, KT)\�
 #   학습 스크립트가 X_train/X_test를 만드는 순간 원본+복사본이 동시에 떠서 최대 약 16.7GB까지 올라감 (한계 초과 위험)
 # - 2일 간격(약 183일, 반년치)로 줄이면 최대 사용량이 약 8.2GB로 떨어져 안전하게 돌아감
 # 여유가 되면 1로 늘려서 시도해볼 수 있지만, 다른 프로그램을 다 끄고 하시는 걸 추천
-SAMPLE_EVERY_N_DAYS = 1
+SAMPLE_EVERY_N_DAYS = 2
 
 categorical_cols = ["route_id","board_stop_id","alight_stop_id","weekday","weather","bus_type_code"]
 numeric_cols = ["hour","is_holiday","headway_sec","seat_capacity"]
