@@ -1,0 +1,54 @@
+{
+  "run_ts": "26.08.14.23-46-22",
+  "experiment_label": "s2_low_lr",
+  "dataset_label": "seongbuk_2024",
+  "sample_every_n_days": 2,
+  "n_estimators": 1200,
+  "feature_fraction": 1.0,
+  "bagging_fraction": 1.0,
+  "bagging_freq": 0,
+  "learning_rate_a": 0.05,
+  "reg_lambda_a": 0.0,
+  "num_leaves_a": 31,
+  "min_child_samples_a": 20,
+  "learning_rate_b": 0.05,
+  "reg_lambda_b": 0.0,
+  "num_leaves_b": 31,
+  "min_child_samples_b": 20,
+  "split_type": "temporal",
+  "temporal_cutoff": "2024-12-01 00:00:00",
+  "train_rows_a": 152632626,
+  "train_rows_b": 27781906,
+  "model_a": {
+    "auc": 0.913114073119996,
+    "accuracy": 0.8810118923356179
+  },
+  "model_b": {
+    "mae": 160.54652735503808,
+    "rmse": 244.4151136337739
+  },
+  "feature_importance_a_gain": {
+    "board_stop_id": 341962782.82315063,
+    "hour": 128696649.01811218,
+    "route_id": 105939336.03956604,
+    "weekday": 34083527.067352295,
+    "headway_sec": 21784197.137451172,
+    "alight_stop_id": 17632726.553222656,
+    "is_holiday": 6906023.513092041,
+    "weather": 802781.622177124,
+    "bus_type_code": 0.0,
+    "seat_capacity": 0.0
+  },
+  "feature_importance_b_gain": {
+    "board_stop_id": 7606710503632.0,
+    "alight_stop_id": 4294858340456.0,
+    "route_id": 1531561755250.0,
+    "hour": 1151825896266.0,
+    "weekday": 214882268350.0,
+    "headway_sec": 186075899152.0,
+    "is_holiday": 36592880174.0,
+    "weather": 9511510930.0,
+    "bus_type_code": 45068100.0,
+    "seat_capacity": 0.0
+  }
+}
