@@ -1,0 +1,176 @@
+로딩 시간: 4.5초
+(170242893, 14)
+route_id                                 0
+board_stop_id                            0
+alight_stop_id                     3479317
+weekday                                  0
+weather                                  0
+bus_type_code                            0
+hour                                     0
+is_holiday                               0
+headway_sec                        1749400
+seat_capacity                            0
+board_datetime                           0
+is_standing                              0
+standing_seconds                       521
+sample_count_route_segment_hour          0
+dtype: int64
+결측 제외 후: (166763576, 14)
+y_standing
+0    136427228
+1     30336348
+Name: count, dtype: int64
+
+[모델B용 사전 추출] 입석 행: 30,336,348
+
+검증 방식: 시간분할 (기준시각=2024-11-01 00:00:00)
+학습 행: 138,275,259 / 검증 행: 28,488,317
+df 삭제 완료, 메모리 확보 (28.1초 경과)
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Number of positive: 24889044, number of negative: 113386215
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 1.962104 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 5006
+[LightGBM] [Info] Number of data points in the train set: 138275259, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.179996 -> initscore=-1.516372
+[LightGBM] [Info] Start training from score -1.516372
+Training until validation scores don't improve for 30 rounds
+[50]	train's binary_logloss: 0.307883	valid's binary_logloss: 0.322066
+[100]	train's binary_logloss: 0.28511	valid's binary_logloss: 0.29932
+[150]	train's binary_logloss: 0.275557	valid's binary_logloss: 0.290198
+[200]	train's binary_logloss: 0.270327	valid's binary_logloss: 0.285294
+[250]	train's binary_logloss: 0.266631	valid's binary_logloss: 0.281919
+[300]	train's binary_logloss: 0.264108	valid's binary_logloss: 0.27973
+[350]	train's binary_logloss: 0.262257	valid's binary_logloss: 0.278238
+[400]	train's binary_logloss: 0.260822	valid's binary_logloss: 0.277115
+[450]	train's binary_logloss: 0.259542	valid's binary_logloss: 0.276127
+[500]	train's binary_logloss: 0.258428	valid's binary_logloss: 0.275241
+[550]	train's binary_logloss: 0.257534	valid's binary_logloss: 0.274601
+[600]	train's binary_logloss: 0.256764	valid's binary_logloss: 0.274057
+[650]	train's binary_logloss: 0.256049	valid's binary_logloss: 0.27356
+[700]	train's binary_logloss: 0.25541	valid's binary_logloss: 0.273109
+[750]	train's binary_logloss: 0.254788	valid's binary_logloss: 0.272702
+[800]	train's binary_logloss: 0.254262	valid's binary_logloss: 0.272399
+[850]	train's binary_logloss: 0.253738	valid's binary_logloss: 0.272087
+[900]	train's binary_logloss: 0.253262	valid's binary_logloss: 0.271799
+[950]	train's binary_logloss: 0.252859	valid's binary_logloss: 0.271579
+[1000]	train's binary_logloss: 0.252439	valid's binary_logloss: 0.271331
+Did not meet early stopping. Best iteration is:
+[1000]	train's binary_logloss: 0.252439	valid's binary_logloss: 0.271331
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[모델A] AUC: 0.9190167082938364
+[모델A] Accuracy: 0.8790214599198682
+
+[모델A 피처 중요도 - split]
+board_stop_id     35681
+alight_stop_id    11978
+route_id           4938
+hour               4597
+weekday            2100
+headway_sec        1494
+is_holiday          718
+weather             492
+bus_type_code         1
+seat_capacity         1
+dtype: int32
+
+[모델A 피처 중요도 - gain]
+board_stop_id     2.272720e+08
+hour              7.770132e+07
+route_id          6.231034e+07
+weekday           2.083401e+07
+headway_sec       1.327235e+07
+alight_stop_id    1.218527e+07
+is_holiday        5.155075e+06
+weather           6.623826e+05
+seat_capacity     1.015040e+02
+bus_type_code     4.977140e+01
+dtype: float64
+
+[모델B] 학습 행: 24,889,044 / 검증 행: 5,447,304
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.407346 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 3950
+[LightGBM] [Info] Number of data points in the train set: 24889044, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Start training from score 355.798991
+Training until validation scores don't improve for 30 rounds
+[50]	train's l2: 67346.1	valid's l2: 72396.6
+[100]	train's l2: 60734.6	valid's l2: 65989.7
+[150]	train's l2: 57696.9	valid's l2: 63078.2
+[200]	train's l2: 55939.3	valid's l2: 61434
+[250]	train's l2: 54804.5	valid's l2: 60382.8
+[300]	train's l2: 53968.8	valid's l2: 59628.3
+[350]	train's l2: 53358.4	valid's l2: 59088.9
+[400]	train's l2: 52905.8	valid's l2: 58710.1
+[450]	train's l2: 52489.7	valid's l2: 58367.5
+[500]	train's l2: 52182.2	valid's l2: 58109.4
+[550]	train's l2: 51869.6	valid's l2: 57901.1
+[600]	train's l2: 51632.9	valid's l2: 57716.4
+[650]	train's l2: 51314.8	valid's l2: 57479.1
+[700]	train's l2: 51095.1	valid's l2: 57324.6
+[750]	train's l2: 50900.3	valid's l2: 57173
+[800]	train's l2: 50720	valid's l2: 57052.5
+[850]	train's l2: 50520.7	valid's l2: 56903.6
+[900]	train's l2: 50365.8	valid's l2: 56793.8
+[950]	train's l2: 50219.2	valid's l2: 56689.3
+[1000]	train's l2: 50080.3	valid's l2: 56596.5
+Did not meet early stopping. Best iteration is:
+[1000]	train's l2: 50080.3	valid's l2: 56596.5
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[모델B] MAE: 159.0초  RMSE: 237.9초  (평균 입석시간: 355.8초)
+
+[모델B 피처 중요도 - split]
+board_stop_id     12110
+alight_stop_id    11520
+hour               2599
+route_id           1618
+headway_sec         918
+weekday             888
+is_holiday          170
+weather             165
+bus_type_code        12
+seat_capacity         0
+dtype: int32
+
+[모델B 피처 중요도 - gain]
+board_stop_id     4.679082e+12
+alight_stop_id    2.658580e+12
+route_id          9.173887e+11
+hour              6.953900e+11
+weekday           1.311282e+11
+headway_sec       1.119009e+11
+is_holiday        2.454172e+10
+weather           6.473945e+09
+bus_type_code     1.139319e+08
+seat_capacity     0.000000e+00
+dtype: float64
+
+저장 완료: C:\Users\dudal\Documents\Codex\2026-08-01\new-chat\KT-DINJAE-2026-AI-seongbuk\experiments\26.08.15.15-20-44\model_a.txt, C:\Users\dudal\Documents\Codex\2026-08-01\new-chat\KT-DINJAE-2026-AI-seongbuk\experiments\26.08.15.15-20-44\model_b.txt
+metrics.json 저장 완료: C:\Users\dudal\Documents\Codex\2026-08-01\new-chat\KT-DINJAE-2026-AI-seongbuk\experiments\26.08.15.15-20-44\metrics.json
