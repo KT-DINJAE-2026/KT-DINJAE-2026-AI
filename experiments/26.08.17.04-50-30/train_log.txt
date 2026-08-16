@@ -1,0 +1,86 @@
+data_load_seconds=6.2 train_shape=(82852953, 14) test_shape=(6542249, 14)
+train: original_rows=82,852,953 clean_rows=81,138,240 removed=1,714,713
+test: original_rows=6,542,249 clean_rows=6,404,364 removed=137,885
+[Model A] train_rows=81,138,240 test_rows=6,404,364
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Number of positive: 14330217, number of negative: 66808023
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.999877 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 5013
+[LightGBM] [Info] Number of data points in the train set: 81138240, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] [binary:BoostFromScore]: pavg=0.176615 -> initscore=-1.539453
+[LightGBM] [Info] Start training from score -1.539453
+[50]	train's binary_logloss: 0.292048	test's binary_logloss: 0.281795
+[100]	train's binary_logloss: 0.273007	test's binary_logloss: 0.264078
+[150]	train's binary_logloss: 0.265167	test's binary_logloss: 0.257315
+[200]	train's binary_logloss: 0.260698	test's binary_logloss: 0.253698
+[250]	train's binary_logloss: 0.257841	test's binary_logloss: 0.25155
+[300]	train's binary_logloss: 0.255643	test's binary_logloss: 0.250087
+[350]	train's binary_logloss: 0.254068	test's binary_logloss: 0.249159
+[400]	train's binary_logloss: 0.252554	test's binary_logloss: 0.2481
+[450]	train's binary_logloss: 0.251374	test's binary_logloss: 0.247343
+[500]	train's binary_logloss: 0.250446	test's binary_logloss: 0.246939
+[550]	train's binary_logloss: 0.249606	test's binary_logloss: 0.246571
+[600]	train's binary_logloss: 0.248782	test's binary_logloss: 0.24615
+[650]	train's binary_logloss: 0.248123	test's binary_logloss: 0.245904
+[700]	train's binary_logloss: 0.247528	test's binary_logloss: 0.245695
+[750]	train's binary_logloss: 0.246794	test's binary_logloss: 0.245397
+[800]	train's binary_logloss: 0.246097	test's binary_logloss: 0.24522
+[850]	train's binary_logloss: 0.245572	test's binary_logloss: 0.245053
+[900]	train's binary_logloss: 0.244948	test's binary_logloss: 0.244836
+[950]	train's binary_logloss: 0.244416	test's binary_logloss: 0.244674
+[1000]	train's binary_logloss: 0.244	test's binary_logloss: 0.244552
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[Model A] AUC=0.9243338597560553 Accuracy=0.8942389907881563
+[Model B] train_rows=14,330,217 test_rows=1,068,010
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.247146 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
+[LightGBM] [Info] Total Bins 3920
+[LightGBM] [Info] Number of data points in the train set: 14330217, number of used features: 10
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[LightGBM] [Info] Start training from score 355.344726
+[50]	train's l2: 62367.6	test's l2: 61937.7
+[100]	train's l2: 56209.8	test's l2: 56005.2
+[150]	train's l2: 53741.6	test's l2: 53749.5
+[200]	train's l2: 52385.6	test's l2: 52667.8
+[250]	train's l2: 51512.9	test's l2: 51989.6
+[300]	train's l2: 50743.6	test's l2: 51397.6
+[350]	train's l2: 50189.2	test's l2: 50987.3
+[400]	train's l2: 49721.7	test's l2: 50661.4
+[450]	train's l2: 49302.6	test's l2: 50363.1
+[500]	train's l2: 48946.2	test's l2: 50126.4
+[550]	train's l2: 48681.1	test's l2: 49960.2
+[600]	train's l2: 48453.4	test's l2: 49829.9
+[650]	train's l2: 48269.8	test's l2: 49694.7
+[700]	train's l2: 48096.5	test's l2: 49604.2
+[750]	train's l2: 47906.8	test's l2: 49499.2
+[800]	train's l2: 47777	test's l2: 49428.2
+[LightGBM] [Warning] feature_fraction is set=1.0, colsample_bytree=1.0 will be ignored. Current value: feature_fraction=1.0
+[LightGBM] [Warning] bagging_fraction is set=1.0, subsample=1.0 will be ignored. Current value: bagging_fraction=1.0
+[LightGBM] [Warning] bagging_freq is set=0, subsample_freq=0 will be ignored. Current value: bagging_freq=0
+[Model B] MAE=151.6434995668418 RMSE=222.32457496903635
+metrics_saved=C:\Users\dudal\Documents\Codex\2026-08-01\new-chat\KT-DINJAE-2026-AI-seongbuk\experiments\26.08.17.04-50-30\metrics.json
